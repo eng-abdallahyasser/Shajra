@@ -821,40 +821,42 @@ class _GreenhouseCard extends StatelessWidget {
     final zoneCount = greenhouse.zonesData.length;
     final treeCount = greenhouse.treesData.length;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cs.surface.withValues(alpha: 0.8),
-        border: Border.all(color: cs.outlineVariant),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: cs.primary.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Name + facility type
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  greenhouse.name.isNotEmpty ? greenhouse.name : 'Unnamed Greenhouse',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    height: 24 / 16,
-                    color: cs.onSurface,
+    return GestureDetector(
+      onTap: () => Get.toNamed(AppRoutes.greenhouseDetails, arguments: greenhouse),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cs.surface.withValues(alpha: 0.8),
+          border: Border.all(color: cs.outlineVariant),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: cs.primary.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Name + facility type
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    greenhouse.name.isNotEmpty ? greenhouse.name : 'Unnamed Greenhouse',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      height: 24 / 16,
+                      color: cs.onSurface,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
               if (greenhouse.facilityType.isNotEmpty)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -929,6 +931,7 @@ class _GreenhouseCard extends StatelessWidget {
             ),
           ],
         ],
+      ),
       ),
     );
   }
