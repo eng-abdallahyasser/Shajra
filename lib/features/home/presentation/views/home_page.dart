@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shajra/features/add_greenhouse/domain/entities/greenhouse_entity.dart';
 import 'package:shajra/routes/app_routes.dart';
@@ -184,9 +185,33 @@ class _EnvironmentalGrid extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Expanded(child: _EnvTile(cs: cs, label: 'HUMIDITY', value: '65%', badgeLabel: 'Good', badgeColor: cs.primary, badgeBg: cs.primary.withValues(alpha: 0.15), statusColor: cs.primary, iconColor: cs.primary)),
+                Expanded(
+                  child: _EnvTile(
+                    cs: cs,
+                    svgPath: 'assets/icons/humidity.svg',
+                    label: 'HUMIDITY',
+                    value: '65%',
+                    badgeLabel: 'Good',
+                    badgeColor: cs.primary,
+                    badgeBg: cs.primary.withValues(alpha: 0.15),
+                    statusColor: cs.primary,
+                    iconColor: cs.primary,
+                  ),
+                ),
                 const SizedBox(height: 0),
-                Expanded(child: _EnvTile(cs: cs, label: 'LIGHT LEVEL', value: '8k lux', badgeLabel: 'Good', badgeColor: cs.primary, badgeBg: cs.primary.withValues(alpha: 0.15), statusColor: cs.onSurface, iconColor: cs.primary)),
+                Expanded(
+                  child: _EnvTile(
+                    cs: cs,
+                    svgPath: 'assets/icons/light lever.svg',
+                    label: 'LIGHT LEVEL',
+                    value: '8k lux',
+                    badgeLabel: 'Good',
+                    badgeColor: cs.primary,
+                    badgeBg: cs.primary.withValues(alpha: 0.15),
+                    statusColor: cs.onSurface,
+                    iconColor: cs.primary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -197,12 +222,23 @@ class _EnvironmentalGrid extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: _EnvTile(cs: cs, label: 'SOIL MOISTURE', value: '42%', badgeLabel: 'Low', badgeColor: cs.error, badgeBg: cs.error.withValues(alpha: 0.15), statusColor: cs.onSurface, iconColor: cs.error),
+                  child: _EnvTile(
+                    cs: cs,
+                    svgPath: 'assets/icons/soil moisture.svg',
+                    label: 'SOIL MOISTURE',
+                    value: '42%',
+                    badgeLabel: 'Low',
+                    badgeColor: cs.error,
+                    badgeBg: cs.error.withValues(alpha: 0.15),
+                    statusColor: cs.onSurface,
+                    iconColor: cs.error,
+                  ),
                 ),
                 const SizedBox(height: 0),
                 Expanded(
                   child: _EnvTile(
                     cs: cs,
+                    svgPath: 'assets/icons/co2.svg',
                     label: 'CO2 LEVEL',
                     value: '400 ppm',
                     badgeLabel: 'Good',
@@ -223,6 +259,7 @@ class _EnvironmentalGrid extends StatelessWidget {
 }
 
 class _EnvTile extends StatelessWidget {
+  final String svgPath;
   final String label;
   final String value;
   final String badgeLabel;
@@ -235,6 +272,7 @@ class _EnvTile extends StatelessWidget {
 
   const _EnvTile({
     required this.cs,
+    required this.svgPath,
     required this.label,
     required this.value,
     required this.badgeLabel,
@@ -265,17 +303,15 @@ class _EnvTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon + Badge row
+          // SVG Icon + Badge row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SvgPicture.asset(
+                svgPath,
                 width: valueTop ? 22 : 16,
                 height: valueTop ? 22 : 20,
-                decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(2),
-                ),
+                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -354,11 +390,24 @@ class _SystemControls extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              _ControlPill(cs: cs, label: 'Irrigation', icon: Icons.water_drop, isActive: true),
+              _ControlPill(
+                cs: cs,
+                label: 'Irrigation',
+                svgPath: 'assets/icons/irrigation.svg',
+                isActive: true,
+              ),
               const SizedBox(width: 8),
-              _ControlPill(cs: cs, label: 'Lighting', icon: Icons.light_mode_outlined),
+              _ControlPill(
+                cs: cs,
+                label: 'Lighting',
+                svgPath: 'assets/icons/lights.svg',
+              ),
               const SizedBox(width: 8),
-              _ControlPill(cs: cs, label: 'Ventilation', icon: Icons.air_outlined),
+              _ControlPill(
+                cs: cs,
+                label: 'Ventilation',
+                svgPath: 'assets/icons/wind.svg',
+              ),
             ],
           ),
         ),
@@ -369,14 +418,14 @@ class _SystemControls extends StatelessWidget {
 
 class _ControlPill extends StatelessWidget {
   final String label;
-  final IconData icon;
+  final String svgPath;
   final bool isActive;
   final ColorScheme cs;
 
   const _ControlPill({
     required this.cs,
     required this.label,
-    required this.icon,
+    required this.svgPath,
     this.isActive = false,
   });
 
@@ -391,10 +440,14 @@ class _ControlPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 15,
-            color: isActive ? cs.onPrimary : cs.onSurfaceVariant,
+          SvgPicture.asset(
+            svgPath,
+            width: 15,
+            height: 15,
+            colorFilter: ColorFilter.mode(
+              isActive ? cs.onPrimary : cs.onSurfaceVariant,
+              BlendMode.srcIn,
+            ),
           ),
           const SizedBox(width: 8),
           Text(
@@ -911,5 +964,3 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
-
-
