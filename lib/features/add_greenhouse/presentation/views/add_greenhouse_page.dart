@@ -11,15 +11,17 @@ class AddGreenhousePage extends GetView<AddGreenhouseController> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF5FCED),
+      backgroundColor: cs.surfaceContainerLow,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5FCED),
+        backgroundColor: cs.surfaceContainerLow,
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          color: const Color(0xFF171D14),
+          color: cs.onSurface,
           onPressed: () => Get.back(),
         ),
       ),
@@ -52,9 +54,9 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: Color(0xFFC0C9BB)),
+          top: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
       ),
       child: Obx(
@@ -72,13 +74,13 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
+              child: Text(
                 'Cancel',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF00450D),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -100,8 +102,8 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     side: BorderSide(
                       color: controller.isFirstStep
-                          ? const Color(0xFFDEE5D6)
-                          : const Color(0xFFC0C9BB),
+                          ? Theme.of(context).colorScheme.surfaceContainerHighest
+                          : Theme.of(context).colorScheme.outlineVariant,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -114,8 +116,8 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
                       fontSize: 12,
                       letterSpacing: 0.6,
                       color: controller.isFirstStep
-                          ? const Color(0xFFDEE5D6)
-                          : const Color(0xFF41493E),
+                          ? Theme.of(context).colorScheme.surfaceContainerHighest
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -140,16 +142,16 @@ class _NextButton extends GetView<AddGreenhouseController> {
         final isLast = controller.isLastStep;
         return Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF00450D),
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: const Color(0x1A000000),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 10),
               ),
               BoxShadow(
-                color: const Color(0x1A000000),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 6,
                 offset: const Offset(0, 4),
               ),

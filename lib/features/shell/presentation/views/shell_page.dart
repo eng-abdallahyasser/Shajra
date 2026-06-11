@@ -32,12 +32,14 @@ class _ShajraBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Container(
       height: 80,
-      decoration: const BoxDecoration(
-        color: Color(0xFFF9F9F9),
+      decoration: BoxDecoration(
+        color: cs.surface,
         border: Border(
-          top: BorderSide(color: Color(0xFFBFCABA), width: 2),
+          top: BorderSide(color: cs.outlineVariant, width: 2),
         ),
       ),
       child: Row(
@@ -106,13 +108,15 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Expanded(
       child: GestureDetector(
         onTap: () => onTap(index),
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            color: isActive ? const Color(0xFF2E7D32) : Colors.transparent,
+            color: isActive ? cs.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -121,7 +125,7 @@ class _NavItem extends StatelessWidget {
               Icon(
                 isActive ? activeIcon : icon,
                 size: 22,
-                color: isActive ? const Color(0xFFCBFFC2) : const Color(0xFF5F5E5E),
+                color: isActive ? cs.onPrimary : cs.onSurfaceVariant,
               ),
               const SizedBox(height: 2),
               Text(
@@ -130,7 +134,7 @@ class _NavItem extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                   height: 1.5,
-                  color: isActive ? const Color(0xFFCBFFC2) : const Color(0xFF5F5E5E),
+                  color: isActive ? cs.onPrimary : cs.onSurfaceVariant,
                 ),
               ),
             ],

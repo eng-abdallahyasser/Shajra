@@ -48,20 +48,20 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
             children: [
               Text(
                 'STEP 0${controller.currentStep.value + 1}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF00450D),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               Text(
                 controller.currentStepLabel,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF41493E),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -80,8 +80,8 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
                     ),
                     decoration: BoxDecoration(
                       color: isFilled
-                          ? const Color(0xFF00450D)
-                          : const Color(0xFFDEE5D6),
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(9999),
                     ),
                   ),
@@ -101,7 +101,8 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final cs = Theme.of(context).colorScheme;
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -110,17 +111,17 @@ class _HeaderSection extends StatelessWidget {
             fontWeight: FontWeight.w700,
             fontSize: 32,
             letterSpacing: -0.64,
-            color: Color(0xFF171D14),
+            color: cs.onSurface,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           'Configure the core physical parameters of your growing environment to enable high-precision climate monitoring.',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16,
             height: 24 / 16,
-            color: Color(0xFF41493E),
+            color: cs.onSurfaceVariant,
           ),
         ),
       ],
@@ -134,18 +135,19 @@ class _FacilityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       height: 192,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFC0C9BB)),
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -155,13 +157,13 @@ class _FacilityCard extends StatelessWidget {
           // Image placeholder with gradient overlay
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFFE9F0E1),
-                    Color(0xFFCDE0C0),
+                    cs.surfaceContainerHigh,
+                    cs.surfaceContainerHighest,
                   ],
                 ),
               ),
@@ -169,7 +171,7 @@ class _FacilityCard extends StatelessWidget {
                 child: Icon(
                   Icons.warehouse_rounded,
                   size: 64,
-                  color: const Color(0xFF1B5E20).withValues(alpha: 0.15),
+                  color: cs.primary.withValues(alpha: 0.15),
                 ),
               ),
             ),
@@ -181,13 +183,13 @@ class _FacilityCard extends StatelessWidget {
             bottom: 0,
             height: 80,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color.fromRGBO(0, 69, 13, 0),
-                    Color.fromRGBO(0, 69, 13, 0.4),
+                    cs.primary.withValues(alpha: 0),
+                    cs.primary.withValues(alpha: 0.4),
                   ],
                 ),
               ),
@@ -200,23 +202,23 @@ class _FacilityCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7.5),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: cs.surface.withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: const Offset(0, 1),
                   ),
                 ],
               ),
-              child: const Text(
+              child: Text(
                 'MODERN GREENHOUSE',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF00450D),
+                  color: cs.primary,
                 ),
               ),
             ),
@@ -231,28 +233,28 @@ class _FacilityCard extends StatelessWidget {
 class _GreenhouseForm extends GetView<AddGreenhouseController> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Greenhouse Name
-        _FieldLabel('Greenhouse Name'),
-        SizedBox(height: 8),
-        _NameField(),
-        SizedBox(height: 24),
+        const _FieldLabel('Greenhouse Name'),
+        const SizedBox(height: 8),
+        const _NameField(),
+        const SizedBox(height: 24),
         // Facility Type
-        _FieldLabel('Facility Type'),
-        SizedBox(height: 8),
-        _FacilityTypeDropdown(),
-        SizedBox(height: 24),
+        const _FieldLabel('Facility Type'),
+        const SizedBox(height: 8),
+        const _FacilityTypeDropdown(),
+        const SizedBox(height: 24),
         // Solar Orientation
-        _FieldLabel('Solar Orientation'),
-        SizedBox(height: 8),
-        _SolarOrientationDropdown(),
-        SizedBox(height: 24),
+        const _FieldLabel('Solar Orientation'),
+        const SizedBox(height: 8),
+        const _SolarOrientationDropdown(),
+        const SizedBox(height: 24),
         // Dimensions
-        _FieldLabel('Dimensions (Meters)'),
-        SizedBox(height: 8),
-        _DimensionFields(),
+        const _FieldLabel('Dimensions (Meters)'),
+        const SizedBox(height: 8),
+        const _DimensionFields(),
       ],
     );
   }
@@ -265,13 +267,14 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Text(
       text.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 12,
         letterSpacing: 0.6,
-        color: Color(0xFF41493E),
+        color: cs.onSurfaceVariant,
       ),
     );
   }
@@ -287,24 +290,24 @@ class _NameField extends GetView<AddGreenhouseController> {
       height: 49,
       child: TextField(
         controller: controller.nameController,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
-          color: Color(0xFF171D14),
+          color: Theme.of(context).colorScheme.onSurface,
         ),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           hintText: 'e.g. North Sector Glasshouse A',
-          hintStyle: TextStyle(color: Color(0xFF6B7280)),
+          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.6)),
           filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          fillColor: Theme.of(context).colorScheme.surface,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Color(0xFFC0C9BB)),
+            borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Color(0xFFC0C9BB)),
+            borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
         ),
       ),
@@ -366,11 +369,12 @@ class _DropdownField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFC0C9BB)),
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
       child: DropdownButtonHideUnderline(
@@ -380,10 +384,10 @@ class _DropdownField extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16),
             child: Text(
               hint,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
-                color: Color(0xFF171D14),
+                color: cs.onSurface,
               ),
             ),
           ),
@@ -392,7 +396,7 @@ class _DropdownField extends StatelessWidget {
             padding: const EdgeInsets.only(right: 9),
             child: Icon(
               Icons.keyboard_arrow_down,
-              color: const Color(0xFF6B7280),
+              color: cs.onSurfaceVariant.withValues(alpha: 0.6),
               size: 24,
             ),
           ),
@@ -403,10 +407,10 @@ class _DropdownField extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   item,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
-                    color: Color(0xFF171D14),
+                    color: cs.onSurface,
                   ),
                 ),
               ),
@@ -464,11 +468,12 @@ class _DimensionInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFC0C9BB)),
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -478,18 +483,18 @@ class _DimensionInput extends StatelessWidget {
             width: 40,
             height: 16,
             alignment: Alignment.center,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(
-                right: BorderSide(color: Color(0xFFC0C9BB)),
+                right: BorderSide(color: cs.outlineVariant),
               ),
             ),
             child: Text(
               prefix,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
                 letterSpacing: 0.6,
-                color: Color(0xFF717A6D),
+                color: cs.outline,
               ),
             ),
           ),
@@ -530,12 +535,13 @@ class _InfoNoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6E7),
-        border: Border.all(color: const Color(0xFFBDEFBE)),
+        color: cs.primaryContainer.withValues(alpha: 0.3),
+        border: Border.all(color: cs.primaryContainer),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -546,18 +552,18 @@ class _InfoNoteCard extends StatelessWidget {
             child: Icon(
               Icons.info_outline,
               size: 20,
-              color: const Color(0xFF426E47),
+              color: cs.primary,
             ),
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'The facility profile you provide will be used to calibrate the climate model for your specific greenhouse geometry and orientation, ensuring accurate microclimate predictions.',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 height: 20 / 14,
-                color: Color(0xFF426E47),
+                color: cs.primary,
               ),
             ),
           ),

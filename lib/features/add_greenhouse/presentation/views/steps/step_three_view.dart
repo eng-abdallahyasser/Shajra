@@ -20,23 +20,23 @@ class StepThreeView extends GetView<AddGreenhouseController> {
               _ProgressHeader(),
               const SizedBox(height: 24),
               // Title
-              const Text(
+              Text(
                 'Review & Confirm',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 28,
                   letterSpacing: -0.64,
-                  color: Color(0xFF171D14),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Check all information before creating the greenhouse.',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
                   height: 22 / 15,
-                  color: Color(0xFF41493E),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 24),
@@ -74,12 +74,12 @@ class StepThreeView extends GetView<AddGreenhouseController> {
                 title: 'Zones (${controller.zones.length})',
                 children: controller.zones.isEmpty
                     ? [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Text(
                             'No zones added.',
                             style: TextStyle(
-                                color: Color(0xFF717A6D), fontSize: 13),
+                                color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 13),
                           ),
                         )
                       ]
@@ -147,6 +147,7 @@ class StepThreeView extends GetView<AddGreenhouseController> {
 class _ProgressHeader extends GetView<AddGreenhouseController> {
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -155,20 +156,20 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
           children: [
             Text(
               'STEP 0${controller.currentStep.value + 1}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
                 letterSpacing: 0.6,
-                color: Color(0xFF00450D),
+                color: cs.primary,
               ),
             ),
             Text(
               controller.currentStepLabel,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
                 letterSpacing: 0.6,
-                color: Color(0xFF41493E),
+                color: cs.onSurfaceVariant,
               ),
             ),
           ],
@@ -185,8 +186,8 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
                   child: Container(
                     margin: EdgeInsets.only(left: i > 0 ? 4 : 0),
                     color: i <= controller.currentStep.value
-                        ? const Color(0xFF00450D)
-                        : const Color(0xFFE3EBDC),
+                        ? cs.primary
+                        : cs.primaryContainer.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -210,18 +211,19 @@ class _SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFC0C9BB)),
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -230,11 +232,11 @@ class _SectionCard extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 11,
               letterSpacing: 0.6,
-              color: Color(0xFF717A6D),
+              color: cs.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 12),
@@ -257,6 +259,7 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -266,20 +269,20 @@ class _InfoRow extends StatelessWidget {
             width: 100,
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 13,
-                color: Color(0xFF717A6D),
+                color: cs.onSurfaceVariant,
               ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: Color(0xFF171D14),
+                color: cs.onSurface,
               ),
             ),
           ),
@@ -301,6 +304,7 @@ class _ZoneRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final scale = AddGreenhouseController.metersToPixels;
     final w = (sizePixels.width / scale).toStringAsFixed(1);
     final h = (sizePixels.height / scale).toStringAsFixed(1);
@@ -311,27 +315,27 @@ class _ZoneRow extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: const BoxDecoration(
-              color: Color(0xFF1B5E20),
+            decoration: BoxDecoration(
+              color: cs.primary,
               shape: BoxShape.circle,
             ),
           ),
           const SizedBox(width: 8),
           Text(
             name,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
-              color: Color(0xFF171D14),
+              color: cs.onSurface,
             ),
           ),
           const Spacer(),
           Text(
             '$w × $h m',
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 12,
-              color: Color(0xFF717A6D),
+              color: cs.onSurfaceVariant,
             ),
           ),
         ],

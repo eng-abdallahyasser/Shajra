@@ -10,9 +10,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
+    final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5FCED),
+      backgroundColor: cs.surfaceContainerLow,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 106),
@@ -21,25 +22,26 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── Hero: Overall Status ──
-                const _OverallStatusCard(),
+                _OverallStatusCard(cs: cs),
                 const SizedBox(height: 24),
 
                 // ── Environmental Grid ──
-                const _EnvironmentalGrid(),
+                _EnvironmentalGrid(cs: cs),
                 const SizedBox(height: 24),
 
                 // ── System Controls ──
-                const _SystemControls(),
+                _SystemControls(cs: cs),
                 const SizedBox(height: 24),
 
                 // ── Active Zones ──
-                const _ActiveZonesSection(),
+                _ActiveZonesSection(cs: cs),
                 const SizedBox(height: 24),
 
                 // ── Saved Greenhouses ──
                 _SavedGreenhousesSection(
                   greenhouses: controller.greenhouses,
                   isLoading: controller.isLoading.value,
+                  cs: cs,
                 ),
               ],
             ),
@@ -51,8 +53,8 @@ class HomePage extends StatelessWidget {
           await Get.toNamed(AppRoutes.addGreenhouse);
           controller.loadGreenhouses();
         },
-        backgroundColor: const Color(0xFF00450D),
-        foregroundColor: Colors.white,
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
         icon: const Icon(Icons.add),
         label: const Text(
           'New Greenhouse',
@@ -72,7 +74,9 @@ class HomePage extends StatelessWidget {
 // ═══════════════════════════════════════════════
 
 class _OverallStatusCard extends StatelessWidget {
-  const _OverallStatusCard();
+  final ColorScheme cs;
+
+  const _OverallStatusCard({required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -80,32 +84,32 @@ class _OverallStatusCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF1B5E20),
+        color: cs.primary.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.08),
+            color: cs.primary.withValues(alpha: 0.08),
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         children: [
           // OVERALL STATUS label
-          const Text(
+          Text(
             'OVERALL STATUS',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
               letterSpacing: 1.2,
-              color: Color.fromRGBO(144, 214, 137, 0.8),
+              color: cs.onPrimary.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 8),
 
           // Temperature display
-          const SizedBox(
+          SizedBox(
             width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -116,11 +120,11 @@ class _OverallStatusCard extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     fontSize: 64,
                     height: 80 / 64,
-                    color: Color(0xFF90D689),
+                    color: cs.onPrimary.withValues(alpha: 0.9),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 39),
+                  padding: const EdgeInsets.only(top: 39),
                   child: Text(
                     '°C',
                     style: TextStyle(
@@ -128,7 +132,7 @@ class _OverallStatusCard extends StatelessWidget {
                       fontSize: 24,
                       height: 32 / 24,
                       letterSpacing: -0.24,
-                      color: Color(0xFF90D689),
+                      color: cs.onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
                 ),
@@ -142,16 +146,16 @@ class _OverallStatusCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+              color: cs.onPrimary.withValues(alpha: 0.2),
+              border: Border.all(color: cs.onPrimary.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(9999),
             ),
-            child: const Text(
+            child: Text(
               'Normal',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: Color(0xFF90D689),
+                color: cs.onPrimary.withValues(alpha: 0.9),
               ),
             ),
           ),
@@ -166,7 +170,9 @@ class _OverallStatusCard extends StatelessWidget {
 // ═══════════════════════════════════════════════
 
 class _EnvironmentalGrid extends StatelessWidget {
-  const _EnvironmentalGrid();
+  final ColorScheme cs;
+
+  const _EnvironmentalGrid({required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -175,12 +181,12 @@ class _EnvironmentalGrid extends StatelessWidget {
       child: Row(
         children: [
           // Left column
-          const Expanded(
+          Expanded(
             child: Column(
               children: [
-                Expanded(child: _EnvTile(label: 'HUMIDITY', value: '65%', badgeLabel: 'Good', badgeColor: Color(0xFF00450D), badgeBg: Color.fromRGBO(172, 244, 164, 0.3), statusColor: Color(0xFF00450D), iconColor: Color(0xFF00450D))),
-                SizedBox(height: 0),
-                Expanded(child: _EnvTile(label: 'LIGHT LEVEL', value: '8k lux', badgeLabel: 'Good', badgeColor: Color(0xFF00450D), badgeBg: Color.fromRGBO(172, 244, 164, 0.3), statusColor: Color(0xFF171D14), iconColor: Color(0xFF00450D))),
+                Expanded(child: _EnvTile(cs: cs, label: 'HUMIDITY', value: '65%', badgeLabel: 'Good', badgeColor: cs.primary, badgeBg: cs.primary.withValues(alpha: 0.15), statusColor: cs.primary, iconColor: cs.primary)),
+                const SizedBox(height: 0),
+                Expanded(child: _EnvTile(cs: cs, label: 'LIGHT LEVEL', value: '8k lux', badgeLabel: 'Good', badgeColor: cs.primary, badgeBg: cs.primary.withValues(alpha: 0.15), statusColor: cs.onSurface, iconColor: cs.primary)),
               ],
             ),
           ),
@@ -190,19 +196,20 @@ class _EnvironmentalGrid extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                const Expanded(
-                  child: _EnvTile(label: 'SOIL MOISTURE', value: '42%', badgeLabel: 'Low', badgeColor: Color(0xFFBA1A1A), badgeBg: Color.fromRGBO(255, 218, 214, 0.5), statusColor: Color(0xFF171D14), iconColor: Color(0xFFBA1A1A)),
+                Expanded(
+                  child: _EnvTile(cs: cs, label: 'SOIL MOISTURE', value: '42%', badgeLabel: 'Low', badgeColor: cs.error, badgeBg: cs.error.withValues(alpha: 0.15), statusColor: cs.onSurface, iconColor: cs.error),
                 ),
                 const SizedBox(height: 0),
                 Expanded(
                   child: _EnvTile(
+                    cs: cs,
                     label: 'CO2 LEVEL',
                     value: '400 ppm',
                     badgeLabel: 'Good',
-                    badgeColor: const Color(0xFF00450D),
-                    badgeBg: const Color.fromRGBO(172, 244, 164, 0.3),
-                    statusColor: const Color(0xFF171D14),
-                    iconColor: const Color(0xFF00450D),
+                    badgeColor: cs.primary,
+                    badgeBg: cs.primary.withValues(alpha: 0.15),
+                    statusColor: cs.onSurface,
+                    iconColor: cs.primary,
                     valueTop: true,
                   ),
                 ),
@@ -224,8 +231,10 @@ class _EnvTile extends StatelessWidget {
   final Color statusColor;
   final Color iconColor;
   final bool valueTop;
+  final ColorScheme cs;
 
   const _EnvTile({
+    required this.cs,
     required this.label,
     required this.value,
     required this.badgeLabel,
@@ -242,14 +251,14 @@ class _EnvTile extends StatelessWidget {
       margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
-        border: Border.all(color: const Color(0xFFE0E8D9)),
+        color: cs.surface.withValues(alpha: 0.8),
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.08),
+            color: cs.primary.withValues(alpha: 0.08),
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -291,11 +300,11 @@ class _EnvTile extends StatelessWidget {
           // Label
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
               letterSpacing: 0.6,
-              color: Color(0xFF41493E),
+              color: cs.onSurfaceVariant,
             ),
           ),
 
@@ -321,20 +330,22 @@ class _EnvTile extends StatelessWidget {
 // ═══════════════════════════════════════════════
 
 class _SystemControls extends StatelessWidget {
-  const _SystemControls();
+  final ColorScheme cs;
+
+  const _SystemControls({required this.cs});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'System Controls',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 18,
             height: 24 / 18,
-            color: Color(0xFF171D14),
+            color: cs.onSurface,
           ),
         ),
         const SizedBox(height: 12),
@@ -342,12 +353,12 @@ class _SystemControls extends StatelessWidget {
           height: 40,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: const [
-              _ControlPill(label: 'Irrigation', icon: Icons.water_drop, isActive: true),
-              SizedBox(width: 8),
-              _ControlPill(label: 'Lighting', icon: Icons.light_mode_outlined),
-              SizedBox(width: 8),
-              _ControlPill(label: 'Ventilation', icon: Icons.air_outlined),
+            children: [
+              _ControlPill(cs: cs, label: 'Irrigation', icon: Icons.water_drop, isActive: true),
+              const SizedBox(width: 8),
+              _ControlPill(cs: cs, label: 'Lighting', icon: Icons.light_mode_outlined),
+              const SizedBox(width: 8),
+              _ControlPill(cs: cs, label: 'Ventilation', icon: Icons.air_outlined),
             ],
           ),
         ),
@@ -360,8 +371,10 @@ class _ControlPill extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isActive;
+  final ColorScheme cs;
 
   const _ControlPill({
+    required this.cs,
     required this.label,
     required this.icon,
     this.isActive = false,
@@ -372,7 +385,7 @@ class _ControlPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF00450D) : const Color(0xFFE3EBDC),
+        color: isActive ? cs.primary : cs.primaryContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(9999),
       ),
       child: Row(
@@ -381,7 +394,7 @@ class _ControlPill extends StatelessWidget {
           Icon(
             icon,
             size: 15,
-            color: isActive ? Colors.white : const Color(0xFF41493E),
+            color: isActive ? cs.onPrimary : cs.onSurfaceVariant,
           ),
           const SizedBox(width: 8),
           Text(
@@ -390,7 +403,7 @@ class _ControlPill extends StatelessWidget {
               fontWeight: FontWeight.w700,
               fontSize: 12,
               letterSpacing: 0.6,
-              color: isActive ? Colors.white : const Color(0xFF41493E),
+              color: isActive ? cs.onPrimary : cs.onSurfaceVariant,
             ),
           ),
         ],
@@ -404,7 +417,9 @@ class _ControlPill extends StatelessWidget {
 // ═══════════════════════════════════════════════
 
 class _ActiveZonesSection extends StatelessWidget {
-  const _ActiveZonesSection();
+  final ColorScheme cs;
+
+  const _ActiveZonesSection({required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -415,13 +430,13 @@ class _ActiveZonesSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Active Zones',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
                 height: 24 / 18,
-                color: Color(0xFF171D14),
+                color: cs.onSurface,
               ),
             ),
             TextButton(
@@ -431,13 +446,13 @@ class _ActiveZonesSection extends StatelessWidget {
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
+              child: Text(
                 'View All',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF00450D),
+                  color: cs.primary,
                 ),
               ),
             ),
@@ -452,27 +467,30 @@ class _ActiveZonesSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: [
               _ZoneCard(
+                cs: cs,
                 name: 'Zone A',
                 status: 'Healthy',
-                statusColor: const Color(0xFF1B5E20),
+                statusColor: cs.primary,
                 humidity: '65%',
                 temp: '24°C',
                 progress: 0.88,
               ),
               const SizedBox(width: 16),
               _ZoneCard(
+                cs: cs,
                 name: 'Zone B',
                 status: 'Critical',
-                statusColor: const Color(0xFFBA1A1A),
+                statusColor: cs.error,
                 humidity: '42%',
                 temp: '31°C',
                 progress: 0.34,
               ),
               const SizedBox(width: 16),
               _ZoneCard(
+                cs: cs,
                 name: 'Zone C',
                 status: 'Warning',
-                statusColor: const Color(0xFFF97316),
+                statusColor: cs.error.withValues(alpha: 0.7),
                 humidity: '51%',
                 temp: '27°C',
                 progress: 0.55,
@@ -492,8 +510,10 @@ class _ZoneCard extends StatelessWidget {
   final String humidity;
   final String temp;
   final double progress;
+  final ColorScheme cs;
 
   const _ZoneCard({
+    required this.cs,
     required this.name,
     required this.status,
     required this.statusColor,
@@ -508,14 +528,14 @@ class _ZoneCard extends StatelessWidget {
       width: 280,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
-        border: Border.all(color: const Color(0xFFE0E8D9)),
+        color: cs.surface.withValues(alpha: 0.8),
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.08),
+            color: cs.primary.withValues(alpha: 0.08),
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -528,11 +548,11 @@ class _ZoneCard extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                   height: 24 / 16,
-                  color: Color(0xFF171D14),
+                  color: cs.onSurface,
                 ),
               ),
               Container(
@@ -573,7 +593,7 @@ class _ZoneCard extends StatelessWidget {
               height: 8,
               child: Stack(
                 children: [
-                  Container(color: const Color(0xFFE9F0E1)),
+                  Container(color: cs.surfaceContainerLow),
                   FractionallySizedBox(
                     alignment: Alignment.centerLeft,
                     widthFactor: progress,
@@ -600,25 +620,26 @@ class _MetricLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 12,
             letterSpacing: 0.6,
-            color: Color(0xFF41493E),
+            color: cs.onSurfaceVariant,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 12,
             letterSpacing: 0.6,
-            color: Color(0xFF41493E),
+            color: cs.onSurfaceVariant,
           ),
         ),
       ],
@@ -633,10 +654,12 @@ class _MetricLabel extends StatelessWidget {
 class _SavedGreenhousesSection extends StatelessWidget {
   final List<GreenhouseEntity> greenhouses;
   final bool isLoading;
+  final ColorScheme cs;
 
   const _SavedGreenhousesSection({
     required this.greenhouses,
     required this.isLoading,
+    required this.cs,
   });
 
   @override
@@ -649,21 +672,21 @@ class _SavedGreenhousesSection extends StatelessWidget {
           children: [
             Text(
               'Saved Greenhouses',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
                 height: 24 / 18,
-                color: Color(0xFF171D14),
+                color: cs.onSurface,
               ),
             ),
             if (greenhouses.isNotEmpty)
               Text(
                 '${greenhouses.length} total',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: Color(0xFF717A6D),
+                  color: cs.outline,
                 ),
               ),
           ],
@@ -671,18 +694,18 @@ class _SavedGreenhousesSection extends StatelessWidget {
         const SizedBox(height: 12),
 
         if (isLoading)
-          const Center(
+          Center(
             child: Padding(
-              padding: EdgeInsets.all(24),
-              child: CircularProgressIndicator(),
+              padding: const EdgeInsets.all(24),
+              child: CircularProgressIndicator(color: cs.primary),
             ),
           )
         else if (greenhouses.isEmpty)
-          _EmptyGreenhouses()
+          const _EmptyGreenhouses()
         else
           ...greenhouses.map((g) => Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _GreenhouseCard(greenhouse: g),
+                child: _GreenhouseCard(greenhouse: g, cs: cs),
               )),
       ],
     );
@@ -690,14 +713,17 @@ class _SavedGreenhousesSection extends StatelessWidget {
 }
 
 class _EmptyGreenhouses extends StatelessWidget {
+  const _EmptyGreenhouses();
+
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
-        border: Border.all(color: const Color(0xFFE0E8D9)),
+        color: cs.surface.withValues(alpha: 0.8),
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -705,24 +731,24 @@ class _EmptyGreenhouses extends StatelessWidget {
           Icon(
             Icons.grass,
             size: 48,
-            color: const Color(0xFF90D689),
+            color: cs.primary.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             'No greenhouses yet',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
-              color: Color(0xFF41493E),
+              color: cs.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'Tap + to create your first greenhouse',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
-              color: Color(0xFF717A6D),
+              color: cs.outline,
             ),
           ),
         ],
@@ -733,8 +759,9 @@ class _EmptyGreenhouses extends StatelessWidget {
 
 class _GreenhouseCard extends StatelessWidget {
   final GreenhouseEntity greenhouse;
+  final ColorScheme cs;
 
-  const _GreenhouseCard({required this.greenhouse});
+  const _GreenhouseCard({required this.greenhouse, required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -745,14 +772,14 @@ class _GreenhouseCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
-        border: Border.all(color: const Color(0xFFE0E8D9)),
+        color: cs.surface.withValues(alpha: 0.8),
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.08),
+            color: cs.primary.withValues(alpha: 0.08),
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -766,11 +793,11 @@ class _GreenhouseCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   greenhouse.name.isNotEmpty ? greenhouse.name : 'Unnamed Greenhouse',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                     height: 24 / 16,
-                    color: Color(0xFF171D14),
+                    color: cs.onSurface,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -779,16 +806,16 @@ class _GreenhouseCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE9F0E1),
+                    color: cs.surfaceContainerLow,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     greenhouse.facilityType.toUpperCase(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 10,
                       letterSpacing: 0.6,
-                      color: Color(0xFF41493E),
+                      color: cs.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -800,17 +827,20 @@ class _GreenhouseCard extends StatelessWidget {
           Row(
             children: [
               _InfoChip(
+                cs: cs,
                 icon: Icons.straighten,
                 label: '${greenhouse.width} × ${greenhouse.length} m',
               ),
               const SizedBox(width: 16),
               _InfoChip(
+                cs: cs,
                 icon: Icons.view_in_ar,
                 label: '$zoneCount zone${zoneCount == 1 ? '' : 's'}',
               ),
               if (treeCount > 0) ...[
                 const SizedBox(width: 16),
                 _InfoChip(
+                  cs: cs,
                   icon: Icons.eco,
                   label: '$treeCount tree${treeCount == 1 ? '' : 's'}',
                 ),
@@ -826,19 +856,21 @@ class _GreenhouseCard extends StatelessWidget {
               children: [
                 if (greenhouse.sensorType != null)
                   _InfoChip(
+                    cs: cs,
                     icon: Icons.sensors,
                     label: '${greenhouse.sensorCount ?? 1} × ${greenhouse.sensorType}',
                   ),
                 if (greenhouse.solarOrientation.isNotEmpty)
                   _InfoChip(
+                    cs: cs,
                     icon: Icons.wb_sunny_outlined,
                     label: greenhouse.solarOrientation,
                   ),
                 const Spacer(),
-                const Icon(
+                Icon(
                   Icons.chevron_right,
                   size: 20,
-                  color: Color(0xFF717A6D),
+                  color: cs.outline,
                 ),
               ],
             ),
@@ -852,8 +884,10 @@ class _GreenhouseCard extends StatelessWidget {
 class _InfoChip extends StatelessWidget {
   final IconData icon;
   final String label;
+  final ColorScheme cs;
 
   const _InfoChip({
+    required this.cs,
     required this.icon,
     required this.label,
   });
@@ -863,14 +897,14 @@ class _InfoChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: const Color(0xFF717A6D)),
+        Icon(icon, size: 14, color: cs.outline),
         const SizedBox(width: 4),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 12,
-            color: Color(0xFF717A6D),
+            color: cs.outline,
           ),
         ),
       ],

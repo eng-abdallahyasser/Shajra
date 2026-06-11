@@ -28,7 +28,8 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final cs = Theme.of(context).colorScheme;
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -38,17 +39,17 @@ class _SectionHeader extends StatelessWidget {
             fontSize: 24,
             height: 32 / 24,
             letterSpacing: -0.24,
-            color: Color(0xFF171D14),
+            color: cs.onSurface,
           ),
         ),
-        SizedBox(height: 0),
+        const SizedBox(height: 0),
         Text(
           'Real-time spatial mapping and vegetation status.',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16,
             height: 24 / 16,
-            color: Color(0xFF41493E),
+            color: cs.onSurfaceVariant,
           ),
         ),
       ],
@@ -62,23 +63,24 @@ class _MapCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFC0C9BB)),
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.08),
+            color: cs.primary.withValues(alpha: 0.08),
             blurRadius: 6,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: Color.fromRGBO(27, 94, 32, 0.04),
+            color: cs.primary.withValues(alpha: 0.04),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -100,11 +102,11 @@ class _MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _LayoutMapTitle(),
-        _LegendRow(),
+        const _LegendRow(),
       ],
     );
   }
@@ -116,7 +118,8 @@ class _LayoutMapTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final cs = Theme.of(context).colorScheme;
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -124,12 +127,12 @@ class _LayoutMapTitle extends StatelessWidget {
           height: 13.5,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Color(0xFF41493E),
+              color: cs.onSurfaceVariant,
               shape: BoxShape.circle,
             ),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           'LAYOUT MAP',
           style: TextStyle(
@@ -137,7 +140,7 @@ class _LayoutMapTitle extends StatelessWidget {
             fontSize: 12,
             height: 16 / 12,
             letterSpacing: 0.6,
-            color: Color(0xFF41493E),
+            color: cs.onSurfaceVariant,
           ),
         ),
       ],
@@ -151,14 +154,15 @@ class _LegendRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final cs = Theme.of(context).colorScheme;
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _LegendDot(color: Color(0xFF1B5E20), label: 'Healthy'),
-        SizedBox(width: 12),
-        _LegendDot(color: Color(0xFFF97316), label: 'Warning'),
-        SizedBox(width: 12),
-        _LegendDot(color: Color(0xFFBA1A1A), label: 'Critical'),
+        _LegendDot(color: cs.primary, label: 'Healthy'),
+        const SizedBox(width: 12),
+        const _LegendDot(color: Color(0xFFF97316), label: 'Warning'),
+        const SizedBox(width: 12),
+        const _LegendDot(color: Color(0xFFBA1A1A), label: 'Critical'),
       ],
     );
   }
@@ -194,17 +198,11 @@ class _LegendDot extends StatelessWidget {
             fontWeight: FontWeight.w700,
             fontSize: 10,
             height: 15 / 10,
-            color: _labelColor(color),
+            color: color,
           ),
         ),
       ],
     );
-  }
-
-  Color _labelColor(Color color) {
-    if (color == const Color(0xFF1B5E20)) return const Color(0xFF00450D);
-    if (color == const Color(0xFFF97316)) return const Color(0xFFEA580C);
-    return const Color(0xFFBA1A1A);
   }
 }
 
@@ -214,6 +212,7 @@ class _MapCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return AspectRatio(
       aspectRatio: 324 / 243,
       child: LayoutBuilder(
@@ -222,15 +221,15 @@ class _MapCanvas extends StatelessWidget {
           final h = constraints.maxHeight;
           return Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFE9F0E1),
-              border: Border.all(color: const Color(0xFFC0C9BB)),
+              color: cs.surfaceContainerLow,
+              border: Border.all(color: cs.outlineVariant),
               borderRadius: BorderRadius.circular(8),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 4,
                   spreadRadius: 1,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -240,12 +239,12 @@ class _MapCanvas extends StatelessWidget {
                 // Grid dot pattern
                 Positioned.fill(
                   child: CustomPaint(
-                    painter: _GridDotPainter(),
+                    painter: _GridDotPainter(color: cs.primary.withValues(alpha: 0.1)),
                   ),
                 ),
 
                 // Zone divider (dashed vertical line) + Zone A/B containers
-                _ZoneDivider(w: w, h: h),
+                _ZoneDivider(w: w, h: h, cs: cs),
 
                 // Zone A label
                 Positioned(
@@ -260,7 +259,7 @@ class _MapCanvas extends StatelessWidget {
                         fontSize: 10,
                         height: 15 / 10,
                         letterSpacing: 1,
-                        color: const Color(0xFF717A6D),
+                        color: cs.outline,
                       ),
                     ),
                   ),
@@ -279,60 +278,54 @@ class _MapCanvas extends StatelessWidget {
                         fontSize: 10,
                         height: 15 / 10,
                         letterSpacing: 1,
-                        color: const Color(0xFF717A6D),
+                        color: cs.outline,
                       ),
                     ),
                   ),
                 ),
 
                 // --- Zone A Trees ---
-                // Tree A1 - Green (healthy)
                 _TreeMarker(
                   left: w * 0.1522,
                   top: h * 0.2024,
-                  color: const Color(0xFF1B5E20),
-                  iconColor: const Color(0xFF90D689),
+                  color: cs.primary,
+                  iconColor: cs.onPrimary,
                 ),
-                // Tree A2 - Orange (warning)
                 _TreeMarker(
                   left: w * 0.3012,
                   top: h * 0.4504,
-                  color: const Color(0xFFF97316),
+                  color: cs.error,
                   iconColor: Colors.white,
                 ),
-                // Tree A3 - Green (healthy)
                 _TreeMarker(
                   left: w * 0.1024,
                   top: h * 0.6983,
-                  color: const Color(0xFF1B5E20),
-                  iconColor: const Color(0xFF90D689),
+                  color: cs.primary,
+                  iconColor: cs.onPrimary,
                 ),
 
                 // --- Zone B Trees ---
-                // Tree B1 - Red (critical)
                 _TreeMarker(
                   left: w * 0.6744,
                   top: h * 0.1528,
                   color: const Color(0xFFBA1A1A),
                   iconColor: Colors.white,
                 ),
-                // Tree B2 - Green (healthy)
                 _TreeMarker(
                   left: w * 0.7738,
                   top: h * 0.5991,
-                  color: const Color(0xFF1B5E20),
-                  iconColor: const Color(0xFF90D689),
+                  color: cs.primary,
+                  iconColor: cs.onPrimary,
                 ),
-                // Tree B3 - Green (healthy)
                 _TreeMarker(
                   left: w * 0.5253,
                   top: h * 0.6988,
-                  color: const Color(0xFF1B5E20),
-                  iconColor: const Color(0xFF90D689),
+                  color: cs.primary,
+                  iconColor: cs.onPrimary,
                 ),
 
                 // Greenhouse structure at bottom center
-                _GreenhouseStructure(w: w),
+                _GreenhouseStructure(w: w, cs: cs),
               ],
             ),
           );
@@ -346,8 +339,9 @@ class _MapCanvas extends StatelessWidget {
 class _ZoneDivider extends StatelessWidget {
   final double w;
   final double h;
+  final ColorScheme cs;
 
-  const _ZoneDivider({required this.w, required this.h});
+  const _ZoneDivider({required this.w, required this.h, required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -358,9 +352,7 @@ class _ZoneDivider extends StatelessWidget {
       child: SizedBox(
         width: 1,
         child: CustomPaint(
-          painter: _DashedLinePainter(
-            color: const Color(0xFFC0C9BB),
-          ),
+          painter: _DashedLinePainter(color: cs.outlineVariant),
         ),
       ),
     );
@@ -370,8 +362,9 @@ class _ZoneDivider extends StatelessWidget {
 /// Greenhouse structure at bottom center of map
 class _GreenhouseStructure extends StatelessWidget {
   final double w;
+  final ColorScheme cs;
 
-  const _GreenhouseStructure({required this.w});
+  const _GreenhouseStructure({required this.w, required this.cs});
 
   @override
   Widget build(BuildContext context) {
@@ -385,22 +378,22 @@ class _GreenhouseStructure extends StatelessWidget {
         height: 16,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFFC0C9BB).withValues(alpha: 0.3),
+          color: cs.outlineVariant.withValues(alpha: 0.3),
           border: Border.all(
-            color: const Color(0xFFC0C9BB).withValues(alpha: 0.5),
+            color: cs.outlineVariant.withValues(alpha: 0.5),
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),
           ),
         ),
-        child: const Text(
+        child: Text(
           'GREENHOUSE',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 8,
             height: 12 / 8,
-            color: Color(0xFF717A6D),
+            color: cs.outline,
           ),
         ),
       ),
@@ -433,7 +426,6 @@ class _TreeMarker extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Background circle with border
             Container(
               width: 24,
               height: 24,
@@ -447,20 +439,19 @@ class _TreeMarker extends StatelessWidget {
                     blurRadius: 0,
                     spreadRadius: 2,
                   ),
-                  const BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 15,
-                    offset: Offset(0, 10),
+                    offset: const Offset(0, 10),
                   ),
-                  const BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 6,
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
             ),
-            // Leaf icon
             Icon(
               Icons.eco,
               size: 11,
@@ -475,10 +466,14 @@ class _TreeMarker extends StatelessWidget {
 
 /// Paints a dotted grid overlay on the map canvas
 class _GridDotPainter extends CustomPainter {
+  final Color color;
+
+  _GridDotPainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF1B5E20).withValues(alpha: 0.1)
+      ..color = color
       ..style = PaintingStyle.fill;
 
     const spacing = 28.0;

@@ -49,9 +49,9 @@ class _MapProgressHeader extends GetView<AddGreenhouseController> {
       () => Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5FCED).withValues(alpha: 0.8),
-          border: const Border(
-            bottom: BorderSide(color: Color(0xFFC0C9BB)),
+          color: Theme.of(context).colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+          border: Border(
+            bottom: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
         ),
         child: Column(
@@ -63,20 +63,20 @@ class _MapProgressHeader extends GetView<AddGreenhouseController> {
               children: [
                 Text(
                   'STEP 0${controller.currentStep.value + 1}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                     letterSpacing: 0.6,
-                    color: Color(0xFF00450D),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Text(
                   controller.currentStepLabel,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                     letterSpacing: 0.6,
-                    color: Color(0xFF41493E),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -94,8 +94,8 @@ class _MapProgressHeader extends GetView<AddGreenhouseController> {
                       child: Container(
                         margin: EdgeInsets.only(left: i > 0 ? 4 : 0),
                         color: isFilled
-                            ? const Color(0xFF00450D)
-                            : const Color(0xFFE3EBDC),
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.5),
                       ),
                     );
                   }),
@@ -119,15 +119,16 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFFE0E8D9),
-            Color(0xFFFFFFFF),
+            cs.surfaceContainerHighest,
+            cs.surface,
           ],
         ),
       ),
@@ -162,7 +163,7 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
                           decoration: BoxDecoration(
                             border: Border.all(
                               color:
-                                  const Color(0xFFC0C9BB).withValues(alpha: 0.4),
+                                  Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.4),
                               width: 1,
                             ),
                           ),
@@ -183,16 +184,16 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.85),
+                                    color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.85),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
                                     '${double.tryParse(controller.widthController.text) ?? 0} × '
                                     '${double.tryParse(controller.lengthController.text) ?? 0} m',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 11,
-                                      color: Color(0xFF717A6D),
+                                      color: Theme.of(context).colorScheme.outline,
                                     ),
                                   ),
                                 ),
@@ -338,8 +339,8 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
               Positioned.fill(
                 child: CustomPaint(
                   painter: _DashedRectPainter(
-                    color: const Color(0xFF1B5E20),
-                    bgColor: const Color(0xFFA5D6A7).withValues(alpha: 0.2),
+                    color: Theme.of(context).colorScheme.primary,
+                    bgColor: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
                     strokeWidth: 2,
                     borderRadius: 8,
                   ),
@@ -357,9 +358,7 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.9),
-                        border: Border.all(
-                          color:
-                              const Color(0xFF00450D).withValues(alpha: 0.2),
+                        border: Border.all(                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(4),
@@ -369,18 +368,18 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                         children: [
                           Text(
                             zone.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 10,
                               letterSpacing: 0.6,
-                              color: Color(0xFF00450D),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           const SizedBox(width: 4),
                           Icon(
                             Icons.drag_indicator,
                             size: 10,
-                            color: const Color(0xFF00450D)
+                            color: Theme.of(context).colorScheme.primary
                                 .withValues(alpha: 0.5),
                           ),
                         ],
@@ -457,7 +456,7 @@ class _ZoneDimensionDialogContentState
                 ),
               ),
               const SizedBox(width: 12),
-              const Icon(Icons.close, size: 16, color: Color(0xFF717A6D)),
+              Icon(Icons.close, size: 16, color: Theme.of(context).colorScheme.outline),
               const SizedBox(width: 12),
               Expanded(
                 child: TextField(
@@ -580,20 +579,20 @@ class _TreeWidget extends StatelessWidget {
           width: 24,
           height: 24,
           decoration: BoxDecoration(
-            color: const Color(0xFF1B5E20),
+            color: Theme.of(context).colorScheme.primary,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1B5E20).withValues(alpha: 0.2),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.eco,
             size: 11,
-            color: Color(0xFF90D689),
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -681,11 +680,11 @@ class _ToolButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isActive
-              ? const Color(0xFF00450D).withValues(alpha: 0.08)
-              : Colors.white,
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.08)
+              : Theme.of(context).colorScheme.surface,
           border: Border.all(
             color:
-                isActive ? const Color(0xFF00450D) : const Color(0xFFC0C9BB),
+                isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
           ),
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [
@@ -699,15 +698,15 @@ class _ToolButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: const Color(0xFF00450D)),
+            Icon(icon, size: 14, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
                 letterSpacing: 0.6,
-                color: Color(0xFF00450D),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],
@@ -737,18 +736,18 @@ class _ZoomButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFC0C9BB)),
+          color: Theme.of(context).colorScheme.surface,
+          border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 2,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
         ),
-        child: Icon(icon, size: size, color: const Color(0xFF00450D)),
+        child: Icon(icon, size: size, color: Theme.of(context).colorScheme.primary),
       ),
     );
   }
@@ -769,19 +768,19 @@ class _NextStepFab extends GetView<AddGreenhouseController> {
       child: Container(
         width: 56,
         height: 56,
-        decoration: const BoxDecoration(
-          color: Color(0xFF00450D),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 15,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 6,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),

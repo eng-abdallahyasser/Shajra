@@ -24,6 +24,7 @@ class AppTheme {
         seedColor: const Color(0xFF2E7D32),
         brightness: Brightness.dark,
       ),
+      scaffoldBackgroundColor: const Color(0xFF111211),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
       ),
