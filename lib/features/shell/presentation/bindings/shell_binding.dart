@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
-import '../../../home/data/repositories/counter_repository_impl.dart';
-import '../../../home/data/sources/local/counter_local_source.dart';
-import '../../../home/domain/repositories/i_counter_repository.dart';
-import '../../../home/domain/usecases/get_counter_usecase.dart';
-import '../../../home/domain/usecases/increment_counter_usecase.dart';
+import '../../../add_greenhouse/data/repositories/greenhouse_repository_impl.dart';
+import '../../../add_greenhouse/data/sources/local/greenhouse_local_source.dart';
+import '../../../add_greenhouse/domain/repositories/i_greenhouse_repository.dart';
 import '../../../home/presentation/controllers/home_controller.dart';
 import '../controllers/shell_controller.dart';
 
@@ -13,22 +11,15 @@ class ShellBinding extends Bindings {
     // Shell controller
     Get.lazyPut<ShellController>(() => ShellController());
 
-    // Home page dependencies
-    Get.lazyPut<CounterLocalSource>(() => CounterLocalSource());
-    Get.lazyPut<ICounterRepository>(
-      () => CounterRepositoryImpl(Get.find<CounterLocalSource>()),
+    // Greenhouse repository (shared with AddGreenhouseBinding)
+    Get.lazyPut<GreenhouseLocalSource>(() => GreenhouseLocalSource());
+    Get.lazyPut<IGreenhouseRepository>(
+      () => GreenhouseRepositoryImpl(Get.find<GreenhouseLocalSource>()),
     );
+
+    // Home page controller
     Get.lazyPut(
-      () => GetCounterUseCase(Get.find<ICounterRepository>()),
-    );
-    Get.lazyPut(
-      () => IncrementCounterUseCase(Get.find<ICounterRepository>()),
-    );
-    Get.lazyPut(
-      () => HomeController(
-        Get.find<GetCounterUseCase>(),
-        Get.find<IncrementCounterUseCase>(),
-      ),
+      () => HomeController(Get.find<IGreenhouseRepository>()),
     );
   }
 }

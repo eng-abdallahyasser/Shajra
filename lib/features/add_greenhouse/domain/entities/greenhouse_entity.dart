@@ -10,6 +10,8 @@ class GreenhouseEntity {
   final String? sensorType;
   final int? sensorCount;
   final String? locationTag;
+  final List<Map<String, dynamic>> zonesData;
+  final List<Map<String, dynamic>> treesData;
 
   const GreenhouseEntity({
     required this.name,
@@ -21,6 +23,8 @@ class GreenhouseEntity {
     this.sensorType,
     this.sensorCount,
     this.locationTag,
+    this.zonesData = const [],
+    this.treesData = const [],
   });
 
   GreenhouseEntity copyWith({
@@ -33,6 +37,8 @@ class GreenhouseEntity {
     String? sensorType,
     int? sensorCount,
     String? locationTag,
+    List<Map<String, dynamic>>? zonesData,
+    List<Map<String, dynamic>>? treesData,
   }) {
     return GreenhouseEntity(
       name: name ?? this.name,
@@ -44,6 +50,8 @@ class GreenhouseEntity {
       sensorType: sensorType ?? this.sensorType,
       sensorCount: sensorCount ?? this.sensorCount,
       locationTag: locationTag ?? this.locationTag,
+      zonesData: zonesData ?? this.zonesData,
+      treesData: treesData ?? this.treesData,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../domain/entities/greenhouse_entity.dart';
 import '../../domain/usecases/create_greenhouse_usecase.dart';
 
@@ -36,6 +37,10 @@ enum MapTool { select, addZone, addTree, addSensor }
 class AddGreenhouseController extends GetxController {
   final CreateGreenhouseUseCase _createUseCase;
   final pageController = PageController(initialPage: 0);
+  final _storage = GetStorage();
+
+  /// GetStorage key for the wizard draft.
+  static const String _draftKey = 'greenhouse_draft';
 
   AddGreenhouseController(this._createUseCase);
 
@@ -44,7 +49,7 @@ class AddGreenhouseController extends GetxController {
   final totalSteps = 3;
 
   // ---- Step labels ----
-  static const stepLabels = ['BASIC INFO', 'GREENHOUSE MAP', 'SENSOR SETUP'];
+  static const stepLabels = ['BASIC INFO', 'GREENHOUSE MAP', 'REVIEW & CONFIRM'];
 
   // ---- Form data (step 1) ----
   final nameController = TextEditingController();
@@ -75,8 +80,31 @@ class AddGreenhouseController extends GetxController {
 
   String get currentStepLabel => stepLabels[currentStep.value];
 
+  /// Zone positions converted to meters (dividing by scale).
+  List<Map<String, dynamic>> get zonesData => zones.map((z) {
+        final scale = metersToPixels;
+        return {
+          'name': z.name,
+          'width': (z.rect.width / scale).toStringAsFixed(1),
+          'height': (z.rect.height / scale).toStringAsFixed(1),
+          'left': (z.rect.left / scale).toStringAsFixed(1),
+          'top': (z.rect.top / scale).toStringAsFixed(1),
+        };
+      }).toList();
+
+  /// Tree positions converted to meters.
+  List<Map<String, dynamic>> get treesData => treePlacements.map((t) {
+        final scale = metersToPixels;
+        return {
+          'x': (t.position.dx / scale).toStringAsFixed(1),
+          'y': (t.position.dy / scale).toStringAsFixed(1),
+          'zoneId': t.zoneId,
+        };
+      }).toList();
+
   /// Advance to the next step if the current step is valid.
   void nextStep() {
+    _saveDraft(); // persist form data from current step
     if (currentStep.value < totalSteps - 1) {
       currentStep.value++;
       pageController.animateToPage(
@@ -121,6 +149,78 @@ class AddGreenhouseController extends GetxController {
     Get.back();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    _loadDraft();
+  }
+
+  /// Persist current wizard state to GetStorage.
+  void _saveDraft() {
+    _storage.write(_draftKey, {
+      'name': nameController.text,
+      'facilityType': selectedFacilityType.value,
+      'solarOrientation': selectedSolarOrientation.value,
+      'width': widthController.text,
+      'length': lengthController.text,
+      'sensorType': selectedSensorType.value,
+      'sensorCount': sensorCountController.text,
+      'zones': zones.map((z) => {
+            'id': z.id,
+            'name': z.name,
+            'left': z.rect.left,
+            'top': z.rect.top,
+            'width': z.rect.width,
+            'height': z.rect.height,
+          }).toList(),
+      'trees': treePlacements.map((t) => {
+            'id': t.id,
+            'zoneId': t.zoneId,
+            'dx': t.position.dx,
+            'dy': t.position.dy,
+          }).toList(),
+    });
+  }
+
+  /// Restore wizard state from GetStorage.
+  void _loadDraft() {
+    final data = _storage.read<Map>(_draftKey);
+    if (data == null) return;
+    nameController.text = data['name'] ?? '';
+    selectedFacilityType.value = data['facilityType'] ?? '';
+    selectedSolarOrientation.value = data['solarOrientation'] ?? '';
+    widthController.text = data['width'] ?? '';
+    lengthController.text = data['length'] ?? '';
+    selectedSensorType.value = data['sensorType'] ?? '';
+    sensorCountController.text = data['sensorCount'] ?? '';
+
+    final zoneList = data['zones'] as List?;
+    if (zoneList != null) {
+      zones.value = zoneList.map((z) => GreenhouseMapZone(
+            id: z['id'] as String,
+            name: z['name'] as String,
+            rect: Rect.fromLTWH(
+              (z['left'] as num).toDouble(),
+              (z['top'] as num).toDouble(),
+              (z['width'] as num).toDouble(),
+              (z['height'] as num).toDouble(),
+            ),
+          )).toList();
+    }
+
+    final treeList = data['trees'] as List?;
+    if (treeList != null) {
+      treePlacements.value = treeList.map((t) => TreePlacement(
+            id: t['id'] as String,
+            zoneId: t['zoneId'] as String?,
+            position: Offset(
+              (t['dx'] as num).toDouble(),
+              (t['dy'] as num).toDouble(),
+            ),
+          )).toList();
+    }
+  }
+
   /// Add a new zone to the map (rect in canvas pixels).
   void addZone(Rect rect) {
     final id = 'zone_${zones.length + 1}';
@@ -129,6 +229,21 @@ class AddGreenhouseController extends GetxController {
       name: 'Zone ${String.fromCharCode(65 + zones.length)}',
       rect: rect,
     ));
+    _saveDraft();
+  }
+
+  /// Rename a zone by its ID.
+  void renameZone(String id, String newName) {
+    final index = zones.indexWhere((z) => z.id == id);
+    if (index >= 0) {
+      final z = zones[index];
+      zones[index] = GreenhouseMapZone(
+        id: z.id,
+        name: newName,
+        rect: z.rect,
+      );
+      _saveDraft();
+    }
   }
 
   /// Shift a zone by [dx, dy] pixels to support drag-to-move.
@@ -141,6 +256,7 @@ class AddGreenhouseController extends GetxController {
         name: z.name,
         rect: z.rect.shift(Offset(dx, dy)),
       );
+      _saveDraft();
     }
   }
 
@@ -152,6 +268,7 @@ class AddGreenhouseController extends GetxController {
       zoneId: zoneId,
       position: position,
     ));
+    _saveDraft();
   }
 
   /// Zoom in by 25%.
@@ -185,12 +302,27 @@ class AddGreenhouseController extends GetxController {
             ? selectedSensorType.value
             : null,
         sensorCount: int.tryParse(sensorCountController.text),
+        zonesData: zonesData,
+        treesData: treesData,
       );
       await _createUseCase(greenhouse);
+      _storage.remove(_draftKey);
       Get.back(result: true);
     } finally {
       isSubmitting.value = false;
     }
+  }
+
+  /// Remove a zone by ID (called from the view in remove mode).
+  void removeZone(String id) {
+    zones.removeWhere((z) => z.id == id);
+    _saveDraft();
+  }
+
+  /// Remove a tree by ID.
+  void removeTree(String id) {
+    treePlacements.removeWhere((t) => t.id == id);
+    _saveDraft();
   }
 
   @override

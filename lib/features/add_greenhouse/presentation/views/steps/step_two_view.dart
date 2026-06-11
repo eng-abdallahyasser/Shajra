@@ -252,17 +252,15 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
 
   /// Remove the topmost zone or tree at the tapped position.
   void _removeAt(Offset position) {
-    final zones = controller.zones;
-    for (int i = zones.length - 1; i >= 0; i--) {
-      if (zones[i].rect.contains(position)) {
-        zones.removeAt(i);
+    for (int i = controller.zones.length - 1; i >= 0; i--) {
+      if (controller.zones[i].rect.contains(position)) {
+        controller.removeZone(controller.zones[i].id);
         return;
       }
     }
-    final trees = controller.treePlacements;
-    for (int i = trees.length - 1; i >= 0; i--) {
-      if ((trees[i].position - position).distance < 20) {
-        trees.removeAt(i);
+    for (int i = controller.treePlacements.length - 1; i >= 0; i--) {
+      if ((controller.treePlacements[i].position - position).distance < 20) {
+        controller.removeTree(controller.treePlacements[i].id);
         return;
       }
     }
@@ -287,6 +285,18 @@ class _DraggableZoneWidget extends StatefulWidget {
 class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
   Offset? _initialRectOrigin;
   Offset? _initialPointerOffset;
+
+  void _showRenameDialog(
+      BuildContext context, GreenhouseMapZone zone,
+      AddGreenhouseController ctrl) {
+    showDialog(
+      context: context,
+      builder: (ctx) => _RenameZoneDialog(
+        currentName: zone.name,
+        onRename: (newName) => ctrl.renameZone(zone.id, newName),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -335,41 +345,46 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                   ),
                 ),
               ),
-              // Zone name label — scaled to fixed screen size
+              // Zone name label — tap to rename, fixed screen size
               Positioned(
                 top: 4,
                 left: 4,
                 child: _FixedScaleWidget(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      border: Border.all(
-                        color: const Color(0xFF00450D).withValues(alpha: 0.2),
-                        width: 1,
+                  child: GestureDetector(
+                    onTap: () => _showRenameDialog(context, zone, controller),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        border: Border.all(
+                          color:
+                              const Color(0xFF00450D).withValues(alpha: 0.2),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          zone.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 10,
-                            letterSpacing: 0.6,
-                            color: Color(0xFF00450D),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            zone.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 10,
+                              letterSpacing: 0.6,
+                              color: Color(0xFF00450D),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.drag_indicator,
-                          size: 10,
-                          color: const Color(0xFF00450D).withValues(alpha: 0.5),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.drag_indicator,
+                            size: 10,
+                            color: const Color(0xFF00450D)
+                                .withValues(alpha: 0.5),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -474,6 +489,71 @@ class _ZoneDimensionDialogContentState
             }
           },
           child: const Text('Add Zone'),
+        ),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rename zone dialog
+// ---------------------------------------------------------------------------
+
+/// Dialog for editing a zone's name.
+class _RenameZoneDialog extends StatefulWidget {
+  final String currentName;
+  final ValueChanged<String> onRename;
+
+  const _RenameZoneDialog({
+    required this.currentName,
+    required this.onRename,
+  });
+
+  @override
+  State<_RenameZoneDialog> createState() => _RenameZoneDialogState();
+}
+
+class _RenameZoneDialogState extends State<_RenameZoneDialog> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.currentName);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Rename Zone'),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        decoration: const InputDecoration(
+          labelText: 'Zone Name',
+          border: OutlineInputBorder(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () {
+            final name = _controller.text.trim();
+            if (name.isNotEmpty) {
+              widget.onRename(name);
+              Navigator.of(context).pop();
+            }
+          },
+          child: const Text('Rename'),
         ),
       ],
     );
