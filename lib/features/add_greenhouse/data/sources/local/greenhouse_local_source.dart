@@ -1,5 +1,7 @@
 import 'package:get_storage/get_storage.dart';
 import '../../../domain/entities/greenhouse_entity.dart';
+import '../../../domain/entities/tree_data.dart';
+import '../../../domain/entities/zone_data.dart';
 
 /// Local data source using GetStorage for persistence.
 class GreenhouseLocalSource {
@@ -37,12 +39,12 @@ class GreenhouseLocalSource {
         'facilityType': g.facilityType,
         'solarOrientation': g.solarOrientation,
         'width': g.width,
-        'length': g.length,
+        'height': g.height,
         'sensorType': g.sensorType,
         'sensorCount': g.sensorCount,
         'locationTag': g.locationTag,
-        'zonesData': g.zonesData,
-        'treesData': g.treesData,
+        'zonesData': g.zonesData.map((z) => z.toMap()).toList(),
+        'treesData': g.treesData.map((t) => t.toMap()).toList(),
       };
 
   GreenhouseEntity _deserialize(Map<String, dynamic> m) => GreenhouseEntity(
@@ -51,17 +53,28 @@ class GreenhouseLocalSource {
         facilityType: m['facilityType'] as String? ?? '',
         solarOrientation: m['solarOrientation'] as String? ?? '',
         width: (m['width'] as num?)?.toDouble() ?? 0,
-        length: (m['length'] as num?)?.toDouble() ?? 0,
+        height: (m['height'] as num?)?.toDouble() ?? 0,
         sensorType: m['sensorType'] as String?,
         sensorCount: m['sensorCount'] as int?,
         locationTag: m['locationTag'] as String?,
-        zonesData: _safeList(m['zonesData']),
-        treesData: _safeList(m['treesData']),
+        zonesData: _safeZoneList(m['zonesData']),
+        treesData: _safeTreeList(m['treesData']),
       );
 
-  List<Map<String, dynamic>> _safeList(dynamic value) {
+  List<ZoneData> _safeZoneList(dynamic value) {
     if (value is List) {
-      return value.cast<Map<String, dynamic>>();
+      return value
+          .map((e) => ZoneData.fromMap(e as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  List<TreeData> _safeTreeList(dynamic value) {
+    if (value is List) {
+      return value
+          .map((e) => TreeData.fromMap(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }

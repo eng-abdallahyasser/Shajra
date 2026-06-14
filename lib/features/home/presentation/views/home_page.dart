@@ -884,7 +884,7 @@ class _GreenhouseCard extends StatelessWidget {
               _InfoChip(
                 cs: cs,
                 icon: Icons.straighten,
-                label: '${greenhouse.width} × ${greenhouse.length} m',
+                label: '${greenhouse.width} × ${greenhouse.height} m',
               ),
               const SizedBox(width: 16),
               _InfoChip(

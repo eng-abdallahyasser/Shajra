@@ -171,7 +171,7 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
                       ),
                       // Floor dimension label (center bottom) — fixed-size
                       if (double.tryParse(controller.widthController.text) != null &&
-                          double.tryParse(controller.lengthController.text) != null &&
+                          double.tryParse(controller.heightController.text) != null &&
                           (double.tryParse(controller.widthController.text) ?? 0) > 0)
                         Positioned(
                           left: 0,
@@ -188,8 +188,8 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    '${double.tryParse(controller.widthController.text) ?? 0} × '
-                                    '${double.tryParse(controller.lengthController.text) ?? 0} m',
+                                    '${double.tryParse(controller.widthController.text) ?? 0} \u00d7 '
+                                    '${double.tryParse(controller.heightController.text) ?? 0} m',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 11,
@@ -201,10 +201,10 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
                             ),
                           ),
                         ),
-                      // Zones (long-press + drag to move)
+                      // Zones (long-press + drag to move, tap for profile)
                       ...controller.zones
                           .map((z) => _DraggableZoneWidget(zone: z)),
-                      // Tree markers
+                      // Tree markers with Micro-Tagging labels
                       ...controller.treePlacements
                           .map((t) => _TreeWidget(tree: t)),
                     ],
@@ -273,7 +273,7 @@ class _CanvasArea extends GetView<AddGreenhouseController> {
 // ---------------------------------------------------------------------------
 
 /// A zone rectangle with dashed border, translucent fill, and name label.
-/// Supports long-press + drag to reposition.
+/// Tap opens a zone profile; long-press + drag repositions.
 class _DraggableZoneWidget extends StatefulWidget {
   final GreenhouseMapZone zone;
 
@@ -296,6 +296,189 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
         currentName: zone.name,
         onRename: (newName) => ctrl.renameZone(zone.id, newName),
       ),
+    );
+  }
+
+  void _showZoneProfile(BuildContext context) {
+    final controller = Get.find<AddGreenhouseController>();
+    final cs = Theme.of(context).colorScheme;
+    final scale = AddGreenhouseController.metersToPixels;
+    final zone = widget.zone;
+
+    // Dimensions in meters
+    final w = (zone.rect.width / scale).toStringAsFixed(1);
+    final h = (zone.rect.height / scale).toStringAsFixed(1);
+    final left = (zone.rect.left / scale).toStringAsFixed(1);
+    final top = (zone.rect.top / scale).toStringAsFixed(1);
+
+    // Count trees in this zone
+    final treeCount = controller.treePlacements.where(
+      (t) => t.zoneId == zone.id,
+    ).length;
+
+    // Parse GH number from zone ID
+    String ghNumber = '';
+    if (zone.id.startsWith('G')) {
+      final parts = zone.id.split('-');
+      if (parts.isNotEmpty) {
+        ghNumber = parts[0].substring(1);
+      }
+    }
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: cs.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Header with zone icon + name
+              Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: cs.primaryContainer,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(Icons.view_in_ar, size: 24, color: cs.primary),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          zone.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            letterSpacing: -0.3,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Zone Profile',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: cs.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Info rows
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.tag,
+                label: 'Micro-Tag',
+                value: zone.id,
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.qr_code,
+                label: 'Greenhouse',
+                value: ghNumber.isNotEmpty ? 'GH #$ghNumber' : '—',
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.eco,
+                label: 'Trees in Zone',
+                value: '$treeCount',
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.straighten,
+                label: 'Dimensions',
+                value: '${w}m \u00d7 ${h}m',
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.my_location,
+                label: 'Position',
+                value: '($left, $top) m',
+              ),
+              const SizedBox(height: 24),
+
+              // Actions row
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Get.back();
+                          _showRenameDialog(context, zone, controller);
+                        },
+                        icon: const Icon(Icons.edit_outlined, size: 18),
+                        label: const Text('Rename'),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Get.back();
+                          controller.removeZone(zone.id);
+                        },
+                        icon: const Icon(Icons.delete_outline, size: 18),
+                        label: const Text('Remove'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: cs.error,
+                          side: BorderSide(color: cs.error.withValues(alpha: 0.3)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      enableDrag: true,
     );
   }
 
@@ -335,14 +518,17 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
           height: zone.rect.height,
           child: Stack(
             children: [
-              // Dashed border + background
+              // Dashed border + background (tap zone body for profile)
               Positioned.fill(
-                child: CustomPaint(
-                  painter: _DashedRectPainter(
-                    color: Theme.of(context).colorScheme.primary,
-                    bgColor: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
-                    strokeWidth: 2,
-                    borderRadius: 8,
+                child: GestureDetector(
+                  onTap: () => _showZoneProfile(context),
+                  child: CustomPaint(
+                    painter: _DashedRectPainter(
+                      color: Theme.of(context).colorScheme.primary,
+                      bgColor: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      strokeWidth: 2,
+                      borderRadius: 8,
+                    ),
                   ),
                 ),
               ),
@@ -358,7 +544,8 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.9),
-                        border: Border.all(                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(4),
@@ -563,38 +750,297 @@ class _RenameZoneDialogState extends State<_RenameZoneDialog> {
 // Tree widget
 // ---------------------------------------------------------------------------
 
-/// A tree marker dot on the greenhouse floor.
+/// A tree marker dot on the greenhouse floor with a Micro-Tagging label.
+/// Tapping opens a profile bottom sheet.
 class _TreeWidget extends StatelessWidget {
   final TreePlacement tree;
 
   const _TreeWidget({required this.tree});
 
+  void _showProfile(BuildContext context) {
+    final controller = Get.find<AddGreenhouseController>();
+    final cs = Theme.of(context).colorScheme;
+    final scale = AddGreenhouseController.metersToPixels;
+
+    // Find zone name from zoneId
+    String zoneName = '\u2014';
+    if (tree.zoneId != null) {
+      final zone = controller.zones.firstWhereOrNull(
+        (z) => z.id == tree.zoneId,
+      );
+      if (zone != null) zoneName = zone.name;
+    }
+
+    // Position in meters
+    final posX = (tree.position.dx / scale).toStringAsFixed(2);
+    final posY = (tree.position.dy / scale).toStringAsFixed(2);
+
+    // Parse GH number from tree ID
+    String ghNumber = '';
+    if (tree.id.startsWith('G')) {
+      final parts = tree.id.split('-');
+      if (parts.isNotEmpty) {
+        ghNumber = parts[0].substring(1);
+      }
+    }
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: cs.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Header with tree icon + ID
+              Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: cs.primaryContainer,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(Icons.eco, size: 24, color: cs.primary),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          tree.id,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            letterSpacing: -0.3,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Tree Profile',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: cs.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Info rows
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.tag,
+                label: 'Micro-Tag',
+                value: tree.id,
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.qr_code,
+                label: 'Greenhouse',
+                value: ghNumber.isNotEmpty ? 'GH #$ghNumber' : '\u2014',
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.view_in_ar,
+                label: 'Zone',
+                value: tree.zoneId != null ? '$zoneName (${tree.zoneId})' : 'Not assigned',
+              ),
+              const SizedBox(height: 12),
+              _ProfileInfoRow(
+                cs: cs,
+                icon: Icons.my_location,
+                label: 'Position',
+                value: '($posX, $posY) m',
+              ),
+              const SizedBox(height: 24),
+
+              // Actions
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Get.back();
+                    controller.removeTree(tree.id);
+                  },
+                  icon: const Icon(Icons.delete_outline, size: 18),
+                  label: const Text('Remove Tree'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: cs.error,
+                    side: BorderSide(color: cs.error.withValues(alpha: 0.3)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      enableDrag: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Extract a compact display label from the Micro-Tagging ID
+    // e.g. "G001-ZoneA-01-T02" -> "ZoneA-01-T02"
+    final tagParts = tree.id.split('-');
+    final shortLabel = tagParts.length >= 3
+        ? tagParts.sublist(tagParts.length - 3).join('-')
+        : tree.id;
+
     return Positioned(
       left: tree.position.dx - 12,
       top: tree.position.dy - 12,
       child: _FixedScaleWidget(
-        child: Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+        child: GestureDetector(
+          onTap: () => _showProfile(context),
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // Tree dot (centered within the 24x24 box)
+                Center(
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.eco,
+                      size: 11,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+                // ID label floating above the dot
+                Positioned(
+                  bottom: 28,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.85),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        shortLabel,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 8,
+                          height: 1.1,
+                          letterSpacing: 0.3,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Profile info row (shared by tree and zone profiles)
+// ---------------------------------------------------------------------------
+
+/// A single info row in a profile bottom sheet.
+class _ProfileInfoRow extends StatelessWidget {
+  final ColorScheme cs;
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _ProfileInfoRow({
+    required this.cs,
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: cs.primary),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 11,
+                  color: cs.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: cs.onSurface,
+                ),
               ),
             ],
           ),
-          child: Icon(
-            Icons.eco,
-            size: 11,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -634,6 +1080,18 @@ class _Toolbar extends GetView<AddGreenhouseController> {
             label: 'Remove',
             isActive: tool == MapTool.select,
             onTap: () => controller.selectedTool.value = MapTool.select,
+          ),
+          const SizedBox(height: 8),
+          _ToolButton(
+            icon: Icons.auto_fix_high,
+            label: 'Generate',
+            isActive: false,
+            onTap: () {
+              controller.generateLayout();
+              // Reset zoom
+              final matrix = Matrix4.diagonal3Values(1, 1, 1);
+              controller.transformationController.value = matrix;
+            },
           ),
           const SizedBox(height: 16),
           // Zoom controls

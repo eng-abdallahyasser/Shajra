@@ -1,17 +1,19 @@
-/// Domain entity representing a greenhouse with its zone configuration
-/// and sensor setup.
+import 'tree_data.dart';
+import 'zone_data.dart';
+
+/// Domain entity representing a greenhouse with its zone, tree, and sensor configuration.
 class GreenhouseEntity {
   final String name;
   final String description;
   final String facilityType;
   final String solarOrientation;
   final double width;
-  final double length;
+  final double height;
   final String? sensorType;
   final int? sensorCount;
   final String? locationTag;
-  final List<Map<String, dynamic>> zonesData;
-  final List<Map<String, dynamic>> treesData;
+  final List<ZoneData> zonesData;
+  final List<TreeData> treesData;
 
   const GreenhouseEntity({
     required this.name,
@@ -19,7 +21,7 @@ class GreenhouseEntity {
     required this.facilityType,
     required this.solarOrientation,
     required this.width,
-    required this.length,
+    required this.height,
     this.sensorType,
     this.sensorCount,
     this.locationTag,
@@ -33,12 +35,12 @@ class GreenhouseEntity {
     String? facilityType,
     String? solarOrientation,
     double? width,
-    double? length,
+    double? height,
     String? sensorType,
     int? sensorCount,
     String? locationTag,
-    List<Map<String, dynamic>>? zonesData,
-    List<Map<String, dynamic>>? treesData,
+    List<ZoneData>? zonesData,
+    List<TreeData>? treesData,
   }) {
     return GreenhouseEntity(
       name: name ?? this.name,
@@ -46,7 +48,7 @@ class GreenhouseEntity {
       facilityType: facilityType ?? this.facilityType,
       solarOrientation: solarOrientation ?? this.solarOrientation,
       width: width ?? this.width,
-      length: length ?? this.length,
+      height: height ?? this.height,
       sensorType: sensorType ?? this.sensorType,
       sensorCount: sensorCount ?? this.sensorCount,
       locationTag: locationTag ?? this.locationTag,

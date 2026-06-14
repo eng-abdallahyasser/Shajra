@@ -63,7 +63,7 @@ class StepThreeView extends GetView<AddGreenhouseController> {
                   _InfoRow(
                     label: 'Dimensions',
                     value:
-                        '${_metersText(controller.widthController.text)} × ${_metersText(controller.lengthController.text)}',
+                        '${_metersText(controller.widthController.text)} × ${_metersText(controller.heightController.text)}',
                   ),
                 ],
               ),

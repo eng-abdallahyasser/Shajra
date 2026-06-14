@@ -89,11 +89,11 @@ class ReportsController extends GetxController {
       final greenhouseReports = greenhouses.map((g) {
         final ghTasks = tasks.where((t) =>
             t.zone == 'All' ||
-            g.zonesData.any((z) => z['name'] == t.zone));
+            g.zonesData.any((z) => z.name == t.zone));
         return GreenhouseReport(
           name: g.name.isNotEmpty ? g.name : 'Unnamed',
           facilityType: g.facilityType.isNotEmpty ? g.facilityType : '—',
-          area: g.width * g.length,
+          area: g.width * g.height,
           zoneCount: g.zonesData.length,
           treeCount: g.treesData.length,
           avgTemperature: _simulateTemperature(g),
@@ -110,7 +110,7 @@ class ReportsController extends GetxController {
         totalGreenhouses: greenhouses.length,
         totalZones: greenhouses.fold(0, (s, g) => s + g.zonesData.length),
         totalTrees: greenhouses.fold(0, (s, g) => s + g.treesData.length),
-        totalArea: greenhouses.fold(0.0, (s, g) => s + g.width * g.length),
+        totalArea: greenhouses.fold(0.0, (s, g) => s + g.width * g.height),
         totalTasks: totalTasks,
         completedTasks: completedTasks,
         greenhouseReports: greenhouseReports,

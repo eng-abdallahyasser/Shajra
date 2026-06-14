@@ -348,6 +348,10 @@ class _ActiveZonesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<GreenhouseDetailsController>();
+    final zones = controller.greenhouse.zonesData;
+    final trees = controller.greenhouse.treesData;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -363,63 +367,66 @@ class _ActiveZonesSection extends StatelessWidget {
                 color: cs.onSurface,
               ),
             ),
-            TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                'View All',
+            if (zones.isNotEmpty)
+              Text(
+                '${zones.length} total',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: cs.primary,
+                  color: cs.outline,
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          height: 128,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _ZoneCard(
-                cs: cs,
-                name: 'Zone A',
-                status: 'Healthy',
-                statusColor: cs.primary,
-                humidity: '65%',
-                temp: '24°C',
-                progress: 0.88,
+        if (zones.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            decoration: BoxDecoration(
+              color: cs.surface.withValues(alpha: 0.8),
+              border: Border.all(color: cs.outlineVariant),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                'No zones defined',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: cs.onSurfaceVariant,
+                ),
               ),
-              const SizedBox(width: 16),
-              _ZoneCard(
-                cs: cs,
-                name: 'Zone B',
-                status: 'Critical',
-                statusColor: cs.error,
-                humidity: '42%',
-                temp: '31°C',
-                progress: 0.34,
-              ),
-              const SizedBox(width: 16),
-              _ZoneCard(
-                cs: cs,
-                name: 'Zone C',
-                status: 'Warning',
-                statusColor: cs.error.withValues(alpha: 0.7),
-                humidity: '51%',
-                temp: '27°C',
-                progress: 0.55,
-              ),
-            ],
+            ),
+          )
+        else
+          SizedBox(
+            height: 128,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: zones.map((z) {
+                final treeCount = trees.where((t) => t.zoneId == z.id).length;
+                // Alternate status for visual variety
+                final idx = zones.indexOf(z);
+                final isHealthy = idx % 3 != 1;
+                final statusColor = isHealthy ? cs.primary : cs.error;
+                final statusLabel = isHealthy ? 'Healthy' : 'Warning';
+
+                return Padding(
+                  padding: EdgeInsets.only(right: zones.last == z ? 0 : 16),
+                  child: _ZoneCard(
+                    cs: cs,
+                    name: z.name,
+                    zoneId: z.id,
+                    status: statusLabel,
+                    statusColor: statusColor,
+                    treeCount: treeCount,
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -427,110 +434,96 @@ class _ActiveZonesSection extends StatelessWidget {
 
 class _ZoneCard extends StatelessWidget {
   final String name;
+  final String zoneId;
   final String status;
   final Color statusColor;
-  final String humidity;
-  final String temp;
-  final double progress;
+  final int treeCount;
   final ColorScheme cs;
 
   const _ZoneCard({
     required this.cs,
     required this.name,
+    required this.zoneId,
     required this.status,
     required this.statusColor,
-    required this.humidity,
-    required this.temp,
-    required this.progress,
+    required this.treeCount,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 280,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cs.surface.withValues(alpha: 0.8),
-        border: Border.all(color: cs.outlineVariant),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: cs.primary.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  height: 24 / 16,
-                  color: cs.onSurface,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.8),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  status,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 10,
-                    height: 15 / 10,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              _MetricLabel(label: 'Humidity', value: humidity),
-              const SizedBox(width: 40),
-              _MetricLabel(label: 'Temp', value: temp),
-            ],
-          ),
-          const SizedBox(height: 4),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(9999),
-            child: SizedBox(
-              width: double.infinity,
-              height: 8,
-              child: Stack(
-                children: [
-                  Container(color: cs.surfaceContainerLow),
-                  FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: progress,
-                    child: Container(color: statusColor),
-                  ),
-                ],
-              ),
+    return GestureDetector(
+      onTap: () => GreenhouseDetailMap.showZoneProfile(context, zoneId, name, treeCount),
+      child: Container(
+        width: 240,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cs.surface.withValues(alpha: 0.8),
+          border: Border.all(color: cs.outlineVariant),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: cs.primary.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      height: 24 / 16,
+                      color: cs.onSurface,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    status,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 10,
+                      height: 15 / 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _ZoneMetricLabel(label: 'Trees', value: '$treeCount'),
+                const SizedBox(width: 24),
+                _ZoneMetricLabel(label: 'Tag', value: zoneId),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _MetricLabel extends StatelessWidget {
+class _ZoneMetricLabel extends StatelessWidget {
   final String label;
   final String value;
 
-  const _MetricLabel({
+  const _ZoneMetricLabel({
     required this.label,
     required this.value,
   });
@@ -545,18 +538,18 @@ class _MetricLabel extends StatelessWidget {
           label,
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: 12,
-            letterSpacing: 0.6,
+            fontSize: 11,
+            letterSpacing: 0.5,
             color: cs.onSurfaceVariant,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             fontSize: 12,
-            letterSpacing: 0.6,
-            color: cs.onSurfaceVariant,
+            letterSpacing: 0.3,
+            color: cs.onSurface,
           ),
         ),
       ],
@@ -643,104 +636,98 @@ class _TreeDataSection extends StatelessWidget {
           ...trees.asMap().entries.map((entry) {
             final i = entry.key;
             final tree = entry.value;
-            final zoneId = tree['zoneId'] as String?;
-            final x = tree['x'] as String? ?? '—';
-            final y = tree['y'] as String? ?? '—';
 
             // Find zone name
-            String zoneName = 'No zone';
-            if (zoneId != null) {
-              final zone = zones.cast<Map<String, dynamic>>().where(
-                  (z) => (z['name'] as String?)?.toLowerCase() == zoneId.toLowerCase()).toList();
-              if (zone.isNotEmpty) {
-                zoneName = zone.first['name'] as String? ?? zoneId;
-              } else {
-                zoneName = zoneId;
-              }
+            String zoneName = 'Not assigned';
+            if (tree.zoneId != null) {
+              final zone = zones.firstWhereOrNull((z) => z.id == tree.zoneId);
+              if (zone != null) zoneName = zone.name;
             }
 
             final isHealthy = i % 3 != 1;
             final statusColor = isHealthy ? cs.primary : cs.error;
             final statusLabel = isHealthy ? 'Healthy' : 'Warning';
 
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: cs.surface.withValues(alpha: 0.8),
-                  border: Border.all(color: cs.outlineVariant),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: cs.primary.withValues(alpha: 0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    // Tree icon
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: statusColor.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
+            return GestureDetector(
+              onTap: () => GreenhouseDetailMap.showTreeProfile(context, tree, zones),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: cs.surface.withValues(alpha: 0.8),
+                    border: Border.all(color: cs.outlineVariant),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: cs.primary.withValues(alpha: 0.08),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                      child: Icon(
-                        Icons.eco,
-                        color: statusColor,
-                        size: 20,
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      // Tree icon
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: statusColor.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.eco,
+                          color: statusColor,
+                          size: 20,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
+                      const SizedBox(width: 16),
 
-                    // Tree info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tree ${i + 1}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              height: 24 / 16,
-                              color: cs.onSurface,
+                      // Tree info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tree.id,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                height: 24 / 16,
+                                color: cs.onSurface,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              _TreeDetailChip(
-                                cs: cs,
-                                icon: Icons.my_location,
-                                label: '($x, $y) m',
-                              ),
-                              const SizedBox(width: 16),
-                              _TreeDetailChip(
-                                cs: cs,
-                                icon: Icons.view_in_ar,
-                                label: zoneName,
-                              ),
-                            ],
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                _TreeDetailChip(
+                                  cs: cs,
+                                  icon: Icons.my_location,
+                                  label: '(${tree.x}, ${tree.y}) m',
+                                ),
+                                const SizedBox(width: 16),
+                                _TreeDetailChip(
+                                  cs: cs,
+                                  icon: Icons.view_in_ar,
+                                  label: zoneName,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    // Status badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: statusColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        statusLabel,
+                      // Status badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: statusColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          statusLabel,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 10,
@@ -751,6 +738,7 @@ class _TreeDataSection extends StatelessWidget {
                   ],
                 ),
               ),
+            )
             );
           }),
       ],

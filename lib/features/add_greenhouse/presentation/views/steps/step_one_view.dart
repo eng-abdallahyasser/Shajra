@@ -25,6 +25,9 @@ class StepOneView extends GetView<AddGreenhouseController> {
           const SizedBox(height: 32),
           // ---- Form Fields ----
           _GreenhouseForm(),
+          const SizedBox(height: 32),
+          // ---- Tree Grid Configuration ----
+          _TreeGridSection(),
           const SizedBox(height: 24),
           // ---- Descriptive Note Card ----
           _InfoNoteCard(),
@@ -446,8 +449,8 @@ class _DimensionFields extends GetView<AddGreenhouseController> {
           // Length
           Expanded(
             child: _DimensionInput(
-              prefix: 'L',
-              controller: controller.lengthController,
+              prefix: 'H',
+              controller: controller.heightController,
             ),
           ),
         ],
@@ -520,6 +523,313 @@ class _DimensionInput extends StatelessWidget {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.fromLTRB(16, 12, 16, 12),
                 isDense: true,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tree Grid Configuration
+// ---------------------------------------------------------------------------
+
+/// Tree grid input section for auto-generating tree placements.
+class _TreeGridSection extends GetView<AddGreenhouseController> {
+  const _TreeGridSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header
+        Row(
+          children: [
+            Icon(Icons.grid_on, size: 20, color: cs.primary),
+            const SizedBox(width: 8),
+            Text(
+              'Tree Placement Grid',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: cs.onSurface,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Configure how trees will be automatically placed in a grid pattern.',
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: cs.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Line length + Trees per line in one row
+        const _FieldLabel('Line Length & Trees'),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 50,
+          child: Row(
+            children: [
+              // Line length
+              Expanded(
+                child: _TreeGridInput(
+                  prefix: 'LEN',
+                  controller: controller.lineLengthController,
+                  hint: '0',
+                  suffix: 'm',
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Trees per line
+              Expanded(
+                child: _TreeGridInput(
+                  prefix: 'N',
+                  controller: controller.treesPerLineController,
+                  hint: '0',
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Spacing between lines
+        const _FieldLabel('Space Between Lines'),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 50,
+          child: _TreeGridInput(
+            prefix: 'GAP',
+            controller: controller.spacingBetweenLinesController,
+            hint: '0',
+            suffix: 'm',
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Number of lines OR space between trees toggle
+        const _FieldLabel('Row Configuration'),
+        const SizedBox(height: 8),
+        Obx(() => Container(
+          decoration: BoxDecoration(
+            color: cs.surface,
+            border: Border.all(color: cs.outlineVariant),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: [
+              // Toggle
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => controller.useLinesCount.value = true,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: controller.useLinesCount.value
+                              ? cs.primary.withValues(alpha: 0.08)
+                              : Colors.transparent,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Number of Lines',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              color: controller.useLinesCount.value
+                                  ? cs.primary
+                                  : cs.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 20,
+                    color: cs.outlineVariant,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => controller.useLinesCount.value = false,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: !controller.useLinesCount.value
+                              ? cs.primary.withValues(alpha: 0.08)
+                              : Colors.transparent,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Space Between Trees',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              color: !controller.useLinesCount.value
+                                  ? cs.primary
+                                  : cs.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // Conditional input
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: cs.outlineVariant),
+                  ),
+                ),
+                child: controller.useLinesCount.value
+                    ? _TreeGridInput(
+                        prefix: '#',
+                        controller: controller.linesCountController,
+                        hint: 'e.g. 8',
+                      )
+                    : _TreeGridInput(
+                        prefix: 'SP',
+                        controller: controller.spacingBetweenTreesController,
+                        hint: 'e.g. 2.5',
+                        suffix: 'm',
+                      ),
+              ),
+            ],
+          ),
+        )),
+
+        const SizedBox(height: 16),
+        // Info chip showing estimated totals (using reactive counters)
+        Obx(() {
+          final total = controller.estimatedTreeCount.value;
+          final zones = controller.estimatedZoneCount.value;
+          if (total <= 0) return const SizedBox.shrink();
+          return Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: cs.primaryContainer.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: cs.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '~$total trees in $zones zone${zones > 1 ? 's' : ''}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: cs.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tree grid single input
+// ---------------------------------------------------------------------------
+
+/// A single input field for tree grid parameters.
+class _TreeGridInput extends StatelessWidget {
+  final String prefix;
+  final TextEditingController controller;
+  final String hint;
+  final String? suffix;
+
+  const _TreeGridInput({
+    required this.prefix,
+    required this.controller,
+    required this.hint,
+    this.suffix,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 16,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(color: cs.outlineVariant),
+              ),
+            ),
+            child: Text(
+              prefix,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 10,
+                letterSpacing: 0.6,
+                color: cs.outline,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+                color: Color(0xFF6B7280),
+              ),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color(0xFF6B7280),
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
+                isDense: true,
+                suffixText: suffix,
+                suffixStyle: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  color: cs.outline,
+                ),
               ),
             ),
           ),
