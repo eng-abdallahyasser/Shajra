@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shajra/features/add_greenhouse/domain/entities/greenhouse_entity.dart';
+import 'package:shajra/routes/app_routes.dart';
 import '../controllers/greenhouse_details_controller.dart';
 import '../widgets/greenhouse_detail_map.dart';
 
@@ -649,7 +650,10 @@ class _TreeDataSection extends StatelessWidget {
             final statusLabel = isHealthy ? 'Healthy' : 'Warning';
 
             return GestureDetector(
-              onTap: () => GreenhouseDetailMap.showTreeProfile(context, tree, zones),
+              onTap: () => Get.toNamed(AppRoutes.treeDetails, arguments: {
+                'tree': tree,
+                'greenhouse': greenhouse,
+              }),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Container(

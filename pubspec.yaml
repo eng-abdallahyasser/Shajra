@@ -39,6 +39,9 @@ dependencies:
   get: ^4.7.3
   get_storage: ^2.1.1
   flutter_svg: ^2.3.0
+  tflite_flutter: ^0.12.1
+  image_picker: ^1.2.2
+  image: ^4.8.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +73,7 @@ flutter:
   assets:
     - assets/app logo.png
     - assets/icons/
+    - assets/ai_models/mango_disease_model.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -75,7 +75,7 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                'Cancel',
+                'add_gh_cancel'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -110,7 +110,7 @@ class _WizardFooter extends GetView<AddGreenhouseController> {
                     ),
                   ),
                   child: Text(
-                    'Back',
+                    'add_gh_back'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 12,
@@ -173,7 +173,7 @@ class _NextButton extends GetView<AddGreenhouseController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isLast ? 'Submit' : 'Next',
+                      isLast ? 'add_gh_submit'.tr : 'add_gh_next'.tr,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 12,

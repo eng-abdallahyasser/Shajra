@@ -3,6 +3,17 @@ import 'package:get/get.dart';
 import '../../domain/entities/task_entity.dart';
 import '../controllers/tasks_controller.dart';
 
+/// Map [TaskPriority] to its translation key.
+const _priorityKeys = {
+  TaskPriority.low: 'tasks_priority_low',
+  TaskPriority.medium: 'tasks_priority_medium',
+  TaskPriority.high: 'tasks_priority_high',
+  TaskPriority.critical: 'tasks_priority_critical',
+};
+
+/// Return the translated label for a task priority.
+String _priorityLabel(TaskPriority p) => _priorityKeys[p]!.tr;
+
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
@@ -101,7 +112,7 @@ class TasksPage extends StatelessWidget {
 
               // Title
               Text(
-                'New Task',
+                'tasks_new_task_title'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 22,
@@ -115,7 +126,7 @@ class TasksPage extends StatelessWidget {
                 controller: titleCtrl,
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: 'What needs to be done?',
+                  hintText: 'tasks_title_hint'.tr,
                   filled: true,
                   fillColor: cs.surfaceContainerLow,
                   border: OutlineInputBorder(
@@ -136,7 +147,7 @@ class TasksPage extends StatelessWidget {
                 controller: descCtrl,
                 maxLines: 2,
                 decoration: InputDecoration(
-                  hintText: 'Description (optional)',
+                  hintText: 'tasks_desc_hint'.tr,
                   filled: true,
                   fillColor: cs.surfaceContainerLow,
                   border: OutlineInputBorder(
@@ -158,7 +169,7 @@ class TasksPage extends StatelessWidget {
                   // Zone dropdown
                   Expanded(
                     child: _SheetDropdown(
-                      label: 'Zone',
+                      label: 'tasks_zone_label'.tr,
                       value: selectedZone.value,
                       items: const ['All', 'Zone A', 'Zone B', 'Zone C'],
                       onChanged: (v) => selectedZone.value = v!,
@@ -170,7 +181,7 @@ class TasksPage extends StatelessWidget {
                   Expanded(
                     child: Obx(
                       () => _SheetDropdown(
-                        label: 'Priority',
+                        label: 'tasks_priority_label'.tr,
                         value: selectedPriority.value.label,
                         items: TaskPriority.values.map((p) => p.label).toList(),
                         onChanged: (v) {
@@ -220,7 +231,7 @@ class TasksPage extends StatelessWidget {
                         Text(
                           selectedDate.value != null
                               ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}'
-                              : 'Set due date (optional)',
+                              : 'tasks_due_hint'.tr,
                           style: TextStyle(
                             color: selectedDate.value != null
                                 ? cs.onSurface
@@ -270,9 +281,9 @@ class TasksPage extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Add Task',
-                    style: TextStyle(
+                  child: Text(
+                    'tasks_add_btn'.tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                     ),
@@ -306,7 +317,7 @@ class _HeaderSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Tasks',
+            'tasks_title'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 28,
@@ -316,7 +327,7 @@ class _HeaderSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Manage your daily greenhouse operations',
+            'tasks_subtitle'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
@@ -346,21 +357,21 @@ class _StatsRow extends StatelessWidget {
       child: Row(
         children: [
           _StatTile(
-            label: 'Total',
+            label: 'tasks_stat_total'.tr,
             value: '${controller.totalCount}',
             color: cs.onSurface,
             cs: cs,
           ),
           const SizedBox(width: 12),
           _StatTile(
-            label: 'Pending',
+            label: 'tasks_stat_pending'.tr,
             value: '${controller.pendingCount}',
             color: cs.error,
             cs: cs,
           ),
           const SizedBox(width: 12),
           _StatTile(
-            label: 'Completed',
+            label: 'tasks_stat_completed'.tr,
             value: '${controller.completedCount}',
             color: cs.primary,
             cs: cs,
@@ -438,7 +449,7 @@ class _FilterChips extends StatelessWidget {
         () => Row(
           children: [
             _FilterChip(
-              label: 'All',
+              label: 'tasks_filter_all'.tr,
               isActive: controller.activeFilter.value == TaskFilter.all,
               count: controller.totalCount,
               cs: cs,
@@ -446,7 +457,7 @@ class _FilterChips extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Pending',
+              label: 'tasks_stat_pending'.tr,
               isActive: controller.activeFilter.value == TaskFilter.pending,
               count: controller.pendingCount,
               cs: cs,
@@ -454,7 +465,7 @@ class _FilterChips extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Completed',
+              label: 'tasks_stat_completed'.tr,
               isActive: controller.activeFilter.value == TaskFilter.completed,
               count: controller.completedCount,
               cs: cs,
@@ -715,9 +726,9 @@ class _TaskCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final diff = date.difference(now).inDays;
-    if (diff < 0) return 'Overdue';
-    if (diff == 0) return 'Today';
-    if (diff == 1) return 'Tomorrow';
+    if (diff < 0) return 'tasks_overdue'.tr;
+    if (diff == 0) return 'tasks_today'.tr;
+    if (diff == 1) return 'tasks_tomorrow'.tr;
     return '${date.day}/${date.month}';
   }
 
@@ -792,7 +803,7 @@ class _PriorityBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        priority.label,
+        _priorityLabel(priority),
         style: TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 11,
@@ -836,7 +847,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'No tasks yet',
+              'tasks_empty_title'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
@@ -845,7 +856,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tap the + button to add your first task',
+              'tasks_empty_subtitle'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,

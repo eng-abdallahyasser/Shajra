@@ -50,7 +50,7 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'STEP 0${controller.currentStep.value + 1}',
+                '${'add_gh_step'.tr} 0${controller.currentStep.value + 1}',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -109,7 +109,7 @@ class _HeaderSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'New Greenhouse Setup',
+          'add_gh_step1_title'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 32,
@@ -119,7 +119,7 @@ class _HeaderSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Configure the core physical parameters of your growing environment to enable high-precision climate monitoring.',
+          'add_gh_step1_subtitle'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16,
@@ -216,7 +216,7 @@ class _FacilityCard extends StatelessWidget {
                 ],
               ),
               child: Text(
-                'MODERN GREENHOUSE',
+                'add_gh_modern_greenhouse'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -240,22 +240,22 @@ class _GreenhouseForm extends GetView<AddGreenhouseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Greenhouse Name
-        const _FieldLabel('Greenhouse Name'),
+        _FieldLabel('add_gh_name_label'.tr),
         const SizedBox(height: 8),
         const _NameField(),
         const SizedBox(height: 24),
         // Facility Type
-        const _FieldLabel('Facility Type'),
+        _FieldLabel('add_gh_facility_type_label'.tr),
         const SizedBox(height: 8),
         const _FacilityTypeDropdown(),
         const SizedBox(height: 24),
         // Solar Orientation
-        const _FieldLabel('Solar Orientation'),
+        _FieldLabel('add_gh_solar_orientation_label'.tr),
         const SizedBox(height: 8),
         const _SolarOrientationDropdown(),
         const SizedBox(height: 24),
         // Dimensions
-        const _FieldLabel('Dimensions (Meters)'),
+        _FieldLabel('add_gh_dimensions_label'.tr),
         const SizedBox(height: 8),
         const _DimensionFields(),
       ],
@@ -299,7 +299,7 @@ class _NameField extends GetView<AddGreenhouseController> {
           color: Theme.of(context).colorScheme.onSurface,
         ),
         decoration: InputDecoration(
-          hintText: 'e.g. North Sector Glasshouse A',
+          hintText: 'add_gh_name_hint'.tr,
           hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.6)),
           filled: true,
           fillColor: Theme.of(context).colorScheme.surface,
@@ -329,7 +329,7 @@ class _FacilityTypeDropdown extends GetView<AddGreenhouseController> {
         value: controller.selectedFacilityType.value.isEmpty
             ? null
             : controller.selectedFacilityType.value,
-        hint: 'Glasshouse',
+        hint: 'add_gh_facility_type_hint'.tr,
         items: AddGreenhouseController.facilityTypes,
         onChanged: (v) => controller.selectedFacilityType.value = v,
       ),
@@ -348,7 +348,7 @@ class _SolarOrientationDropdown extends GetView<AddGreenhouseController> {
         value: controller.selectedSolarOrientation.value.isEmpty
             ? null
             : controller.selectedSolarOrientation.value,
-        hint: 'North-South Alignment',
+        hint: 'add_gh_solar_orientation_hint'.tr,
         items: AddGreenhouseController.solarOrientations,
         onChanged: (v) => controller.selectedSolarOrientation.value = v,
       ),
@@ -441,7 +441,7 @@ class _DimensionFields extends GetView<AddGreenhouseController> {
           // Width
           Expanded(
             child: _DimensionInput(
-              prefix: 'W',
+              prefix: 'add_gh_width'.tr,
               controller: controller.widthController,
             ),
           ),
@@ -449,7 +449,7 @@ class _DimensionFields extends GetView<AddGreenhouseController> {
           // Length
           Expanded(
             child: _DimensionInput(
-              prefix: 'H',
+              prefix: 'add_gh_length'.tr,
               controller: controller.heightController,
             ),
           ),
@@ -552,7 +552,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
             Icon(Icons.grid_on, size: 20, color: cs.primary),
             const SizedBox(width: 8),
             Text(
-              'Tree Placement Grid',
+              'add_gh_tree_grid_title'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -563,7 +563,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
         ),
         const SizedBox(height: 4),
         Text(
-          'Configure how trees will be automatically placed in a grid pattern.',
+          'add_gh_tree_grid_subtitle'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 14,
@@ -573,7 +573,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
         const SizedBox(height: 20),
 
         // Line length + Trees per line in one row
-        const _FieldLabel('Line Length & Trees'),
+        _FieldLabel('add_gh_line_length_label'.tr),
         const SizedBox(height: 8),
         SizedBox(
           height: 50,
@@ -582,7 +582,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
               // Line length
               Expanded(
                 child: _TreeGridInput(
-                  prefix: 'LEN',
+                  prefix: 'add_gh_len'.tr,
                   controller: controller.lineLengthController,
                   hint: '0',
                   suffix: 'm',
@@ -592,7 +592,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
               // Trees per line
               Expanded(
                 child: _TreeGridInput(
-                  prefix: 'N',
+                  prefix: 'add_gh_n'.tr,
                   controller: controller.treesPerLineController,
                   hint: '0',
                 ),
@@ -603,12 +603,12 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
         const SizedBox(height: 20),
 
         // Spacing between lines
-        const _FieldLabel('Space Between Lines'),
+        _FieldLabel('add_gh_space_between_lines'.tr),
         const SizedBox(height: 8),
         SizedBox(
           height: 50,
           child: _TreeGridInput(
-            prefix: 'GAP',
+            prefix: 'add_gh_gap'.tr,
             controller: controller.spacingBetweenLinesController,
             hint: '0',
             suffix: 'm',
@@ -617,7 +617,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
         const SizedBox(height: 20),
 
         // Number of lines OR space between trees toggle
-        const _FieldLabel('Row Configuration'),
+        _FieldLabel('add_gh_row_config_label'.tr),
         const SizedBox(height: 8),
         Obx(() => Container(
           decoration: BoxDecoration(
@@ -645,7 +645,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
                         ),
                         child: Center(
                           child: Text(
-                            'Number of Lines',
+                            'add_gh_num_lines'.tr,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
@@ -678,7 +678,7 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
                         ),
                         child: Center(
                           child: Text(
-                            'Space Between Trees',
+                            'add_gh_space_between_trees'.tr,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
@@ -704,14 +704,14 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
                 ),
                 child: controller.useLinesCount.value
                     ? _TreeGridInput(
-                        prefix: '#',
+                        prefix: 'add_gh_hash'.tr,
                         controller: controller.linesCountController,
-                        hint: 'e.g. 8',
+                        hint: 'add_gh_lines_count_hint'.tr,
                       )
                     : _TreeGridInput(
-                        prefix: 'SP',
+                        prefix: 'add_gh_sp'.tr,
                         controller: controller.spacingBetweenTreesController,
-                        hint: 'e.g. 2.5',
+                        hint: 'add_gh_spacing_hint'.tr,
                         suffix: 'm',
                       ),
               ),
@@ -737,7 +737,10 @@ class _TreeGridSection extends GetView<AddGreenhouseController> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '~$total trees in $zones zone${zones > 1 ? 's' : ''}',
+                    'add_gh_estimated_trees'.trParams({
+                      'trees': total.toString(),
+                      'zones': zones.toString(),
+                    }),
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 13,
@@ -868,7 +871,7 @@ class _InfoNoteCard extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              'The facility profile you provide will be used to calibrate the climate model for your specific greenhouse geometry and orientation, ensuring accurate microclimate predictions.',
+              'add_gh_info_note'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,

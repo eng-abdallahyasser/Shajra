@@ -62,7 +62,7 @@ class _MapProgressHeader extends GetView<AddGreenhouseController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'STEP 0${controller.currentStep.value + 1}',
+                  '${'add_gh_step'.tr} 0${controller.currentStep.value + 1}',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
@@ -378,7 +378,7 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Zone Profile',
+                          'add_gh_zone_profile'.tr,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 13,
@@ -396,35 +396,35 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.tag,
-                label: 'Micro-Tag',
+                label: 'add_gh_micro_tag'.tr,
                 value: zone.id,
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.qr_code,
-                label: 'Greenhouse',
+                label: 'add_gh_greenhouse'.tr,
                 value: ghNumber.isNotEmpty ? 'GH #$ghNumber' : '—',
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.eco,
-                label: 'Trees in Zone',
+                label: 'add_gh_trees_in_zone'.tr,
                 value: '$treeCount',
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.straighten,
-                label: 'Dimensions',
+                label: 'add_gh_dimensions'.tr,
                 value: '${w}m \u00d7 ${h}m',
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.my_location,
-                label: 'Position',
+                label: 'add_gh_position'.tr,
                 value: '($left, $top) m',
               ),
               const SizedBox(height: 24),
@@ -441,7 +441,7 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                           _showRenameDialog(context, zone, controller);
                         },
                         icon: const Icon(Icons.edit_outlined, size: 18),
-                        label: const Text('Rename'),
+                        label: Text('add_gh_rename'.tr),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -460,7 +460,7 @@ class _DraggableZoneWidgetState extends State<_DraggableZoneWidget> {
                           controller.removeZone(zone.id);
                         },
                         icon: const Icon(Icons.delete_outline, size: 18),
-                        label: const Text('Remove'),
+                        label: Text('add_gh_remove'.tr),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: cs.error,
                           side: BorderSide(color: cs.error.withValues(alpha: 0.3)),
@@ -619,12 +619,12 @@ class _ZoneDimensionDialogContentState
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Zone Dimensions'),
+      title: Text('add_gh_zone_dimensions_title'.tr),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Enter the zone dimensions in meters:',
+          Text(
+            'add_gh_zone_dimensions_desc'.tr,
             style: TextStyle(fontSize: 14, color: Color(0xFF41493E)),
           ),
           const SizedBox(height: 16),
@@ -634,8 +634,8 @@ class _ZoneDimensionDialogContentState
                 child: TextField(
                   controller: _widthController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Width (m)',
+                  decoration: InputDecoration(
+                    labelText: 'add_gh_width_m'.tr,
                     border: OutlineInputBorder(),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -649,8 +649,8 @@ class _ZoneDimensionDialogContentState
                 child: TextField(
                   controller: _heightController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Height (m)',
+                  decoration: InputDecoration(
+                    labelText: 'add_gh_height_m'.tr,
                     border: OutlineInputBorder(),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -664,7 +664,7 @@ class _ZoneDimensionDialogContentState
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text('add_gh_cancel'.tr),
         ),
         FilledButton(
           onPressed: () {
@@ -674,7 +674,7 @@ class _ZoneDimensionDialogContentState
               Navigator.of(context).pop(Size(w, h));
             }
           },
-          child: const Text('Add Zone'),
+          child: Text('add_gh_add_zone_btn'.tr),
         ),
       ],
     );
@@ -717,19 +717,19 @@ class _RenameZoneDialogState extends State<_RenameZoneDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Rename Zone'),
+      title: Text('add_gh_rename_zone_title'.tr),
       content: TextField(
         controller: _controller,
         autofocus: true,
-        decoration: const InputDecoration(
-          labelText: 'Zone Name',
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          labelText: 'add_gh_zone_name_label'.tr,
+          border: const OutlineInputBorder(),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text('add_gh_cancel'.tr),
         ),
         FilledButton(
           onPressed: () {
@@ -739,7 +739,7 @@ class _RenameZoneDialogState extends State<_RenameZoneDialog> {
               Navigator.of(context).pop();
             }
           },
-          child: const Text('Rename'),
+          child: Text('add_gh_rename'.tr),
         ),
       ],
     );
@@ -837,7 +837,7 @@ class _TreeWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Tree Profile',
+                          'add_gh_tree_profile'.tr,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 13,
@@ -855,28 +855,28 @@ class _TreeWidget extends StatelessWidget {
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.tag,
-                label: 'Micro-Tag',
+                label: 'add_gh_micro_tag'.tr,
                 value: tree.id,
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.qr_code,
-                label: 'Greenhouse',
+                label: 'add_gh_greenhouse'.tr,
                 value: ghNumber.isNotEmpty ? 'GH #$ghNumber' : '\u2014',
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.view_in_ar,
-                label: 'Zone',
-                value: tree.zoneId != null ? '$zoneName (${tree.zoneId})' : 'Not assigned',
+                label: 'add_gh_zone'.tr,
+                value: tree.zoneId != null ? '$zoneName (${tree.zoneId})' : 'add_gh_not_assigned'.tr,
               ),
               const SizedBox(height: 12),
               _ProfileInfoRow(
                 cs: cs,
                 icon: Icons.my_location,
-                label: 'Position',
+                label: 'add_gh_position'.tr,
                 value: '($posX, $posY) m',
               ),
               const SizedBox(height: 24),
@@ -891,7 +891,7 @@ class _TreeWidget extends StatelessWidget {
                     controller.removeTree(tree.id);
                   },
                   icon: const Icon(Icons.delete_outline, size: 18),
-                  label: const Text('Remove Tree'),
+                  label: Text('add_gh_remove_tree'.tr),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: cs.error,
                     side: BorderSide(color: cs.error.withValues(alpha: 0.3)),
@@ -1063,28 +1063,28 @@ class _Toolbar extends GetView<AddGreenhouseController> {
         children: [
           _ToolButton(
             icon: Icons.add_box_outlined,
-            label: 'Add Zone',
+            label: 'add_gh_add_zone'.tr,
             isActive: tool == MapTool.addZone,
             onTap: () => controller.selectedTool.value = MapTool.addZone,
           ),
           const SizedBox(height: 8),
           _ToolButton(
             icon: Icons.eco,
-            label: 'Add Trees',
+            label: 'add_gh_add_trees'.tr,
             isActive: tool == MapTool.addTree,
             onTap: () => controller.selectedTool.value = MapTool.addTree,
           ),
           const SizedBox(height: 8),
           _ToolButton(
             icon: Icons.remove_circle_outline,
-            label: 'Remove',
+            label: 'add_gh_remove'.tr,
             isActive: tool == MapTool.select,
             onTap: () => controller.selectedTool.value = MapTool.select,
           ),
           const SizedBox(height: 8),
           _ToolButton(
             icon: Icons.auto_fix_high,
-            label: 'Generate',
+            label: 'add_gh_generate'.tr,
             isActive: false,
             onTap: () {
               controller.generateLayout();

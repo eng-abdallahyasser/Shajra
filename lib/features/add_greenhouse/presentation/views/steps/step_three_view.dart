@@ -21,7 +21,7 @@ class StepThreeView extends GetView<AddGreenhouseController> {
               const SizedBox(height: 24),
               // Title
               Text(
-                'Review & Confirm',
+                'add_gh_review_title'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 28,
@@ -31,7 +31,7 @@ class StepThreeView extends GetView<AddGreenhouseController> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Check all information before creating the greenhouse.',
+                'add_gh_review_subtitle'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
@@ -43,25 +43,25 @@ class StepThreeView extends GetView<AddGreenhouseController> {
 
               // ---- Greenhouse info card ----
               _SectionCard(
-                title: 'Greenhouse Info',
+                title: 'add_gh_greenhouse_info'.tr,
                 children: [
                   _InfoRow(
-                      label: 'Name',
+                      label: 'add_gh_name'.tr,
                       value: controller.nameController.text.isNotEmpty
                           ? controller.nameController.text
                           : '—'),
                   _InfoRow(
-                      label: 'Facility Type',
+                      label: 'add_gh_facility_type'.tr,
                       value: controller.selectedFacilityType.value.isNotEmpty
                           ? controller.selectedFacilityType.value
                           : '—'),
                   _InfoRow(
-                      label: 'Orientation',
+                      label: 'add_gh_orientation'.tr,
                       value: controller.selectedSolarOrientation.value.isNotEmpty
                           ? controller.selectedSolarOrientation.value
                           : '—'),
                   _InfoRow(
-                    label: 'Dimensions',
+                    label: 'add_gh_dimensions'.tr,
                     value:
                         '${_metersText(controller.widthController.text)} × ${_metersText(controller.heightController.text)}',
                   ),
@@ -71,13 +71,13 @@ class StepThreeView extends GetView<AddGreenhouseController> {
 
               // ---- Zones card ----
               _SectionCard(
-                title: 'Zones (${controller.zones.length})',
+                title: '${'add_gh_zones'.tr} (${controller.zones.length})',
                 children: controller.zones.isEmpty
                     ? [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            'No zones added.',
+                            'add_gh_no_zones'.tr,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 13),
                           ),
@@ -94,15 +94,15 @@ class StepThreeView extends GetView<AddGreenhouseController> {
 
               // ---- Trees card ----
               _SectionCard(
-                title: 'Trees (${controller.treePlacements.length})',
+                title: '${'add_gh_trees'.tr} (${controller.treePlacements.length})',
                 children: [
                   _InfoRow(
-                    label: 'Total placed',
+                    label: 'add_gh_total_placed'.tr,
                     value: '${controller.treePlacements.length}',
                   ),
                   if (controller.zones.isNotEmpty)
                     _InfoRow(
-                      label: 'Avg per zone',
+                      label: 'add_gh_avg_per_zone'.tr,
                       value: (controller.treePlacements.length /
                               controller.zones.length)
                           .toStringAsFixed(1),
@@ -113,14 +113,14 @@ class StepThreeView extends GetView<AddGreenhouseController> {
 
               // ---- Sensor card ----
               _SectionCard(
-                title: 'Sensor Setup',
+                title: 'add_gh_sensor_setup'.tr,
                 children: [
                   _InfoRow(
-                    label: 'Type',
+                    label: 'add_gh_sensor_type'.tr,
                     value: sensorLabel(controller.selectedSensorType.value),
                   ),
                   _InfoRow(
-                    label: 'Count',
+                    label: 'add_gh_sensor_count'.tr,
                     value: controller.sensorCountController.text.isNotEmpty
                         ? controller.sensorCountController.text
                         : '—',
@@ -155,7 +155,7 @@ class _ProgressHeader extends GetView<AddGreenhouseController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'STEP 0${controller.currentStep.value + 1}',
+              '${'add_gh_step'.tr} 0${controller.currentStep.value + 1}',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 12,

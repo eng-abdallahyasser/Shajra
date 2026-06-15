@@ -57,9 +57,9 @@ class HomePage extends StatelessWidget {
         backgroundColor: cs.primary,
         foregroundColor: cs.onPrimary,
         icon: const Icon(Icons.add),
-        label: const Text(
-          'New Greenhouse',
-          style: TextStyle(
+        label: Text(
+          'home_new_greenhouse'.tr,
+          style: const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 12,
             letterSpacing: 0.6,
@@ -99,7 +99,7 @@ class _OverallStatusCard extends StatelessWidget {
         children: [
           // OVERALL STATUS label
           Text(
-            'OVERALL STATUS',
+            'home_overall_status'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
@@ -152,7 +152,7 @@ class _OverallStatusCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(9999),
             ),
             child: Text(
-              'Normal',
+              'home_status_normal'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -189,9 +189,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/humidity.svg',
-                    label: 'HUMIDITY',
+                    label: 'home_humidity'.tr,
                     value: '65%',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.primary,
@@ -203,9 +203,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/light lever.svg',
-                    label: 'LIGHT LEVEL',
+                    label: 'home_light_level'.tr,
                     value: '8k lux',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -225,9 +225,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/soil moisture.svg',
-                    label: 'SOIL MOISTURE',
+                    label: 'home_soil_moisture'.tr,
                     value: '42%',
-                    badgeLabel: 'Low',
+                    badgeLabel: 'home_badge_low'.tr,
                     badgeColor: cs.error,
                     badgeBg: cs.error.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -239,9 +239,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/co2.svg',
-                    label: 'CO2 LEVEL',
+                    label: 'home_co2_level'.tr,
                     value: '400 ppm',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -376,7 +376,7 @@ class _SystemControls extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'System Controls',
+          'home_system_controls'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 18,
@@ -392,20 +392,20 @@ class _SystemControls extends StatelessWidget {
             children: [
               _ControlPill(
                 cs: cs,
-                label: 'Irrigation',
+                label: 'home_control_irrigation'.tr,
                 svgPath: 'assets/icons/irrigation.svg',
                 isActive: true,
               ),
               const SizedBox(width: 8),
               _ControlPill(
                 cs: cs,
-                label: 'Lighting',
+                label: 'home_control_lighting'.tr,
                 svgPath: 'assets/icons/lights.svg',
               ),
               const SizedBox(width: 8),
               _ControlPill(
                 cs: cs,
-                label: 'Ventilation',
+                label: 'home_control_ventilation'.tr,
                 svgPath: 'assets/icons/wind.svg',
               ),
             ],
@@ -484,7 +484,7 @@ class _ActiveZonesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Active Zones',
+              'home_active_zones'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -500,7 +500,7 @@ class _ActiveZonesSection extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                'View All',
+                'home_view_all'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -521,8 +521,8 @@ class _ActiveZonesSection extends StatelessWidget {
             children: [
               _ZoneCard(
                 cs: cs,
-                name: 'Zone A',
-                status: 'Healthy',
+                name: 'home_zone_a'.tr,
+                status: 'home_status_healthy'.tr,
                 statusColor: cs.primary,
                 humidity: '65%',
                 temp: '24°C',
@@ -531,8 +531,8 @@ class _ActiveZonesSection extends StatelessWidget {
               const SizedBox(width: 16),
               _ZoneCard(
                 cs: cs,
-                name: 'Zone B',
-                status: 'Critical',
+                name: 'home_zone_b'.tr,
+                status: 'home_status_critical'.tr,
                 statusColor: cs.error,
                 humidity: '42%',
                 temp: '31°C',
@@ -541,8 +541,8 @@ class _ActiveZonesSection extends StatelessWidget {
               const SizedBox(width: 16),
               _ZoneCard(
                 cs: cs,
-                name: 'Zone C',
-                status: 'Warning',
+                name: 'home_zone_c'.tr,
+                status: 'home_status_warning'.tr,
                 statusColor: cs.error.withValues(alpha: 0.7),
                 humidity: '51%',
                 temp: '27°C',
@@ -631,9 +631,9 @@ class _ZoneCard extends StatelessWidget {
           // Metrics row
           Row(
             children: [
-              _MetricLabel(label: 'Humidity', value: humidity),
+              _MetricLabel(label: 'home_metric_humidity'.tr, value: humidity),
               const SizedBox(width: 40),
-              _MetricLabel(label: 'Temp', value: temp),
+              _MetricLabel(label: 'home_metric_temp'.tr, value: temp),
             ],
           ),
           const SizedBox(height: 4),
@@ -724,7 +724,7 @@ class _SavedGreenhousesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Saved Greenhouses',
+              'home_saved_greenhouses'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -734,7 +734,7 @@ class _SavedGreenhousesSection extends StatelessWidget {
             ),
             if (greenhouses.isNotEmpty)
               Text(
-                '${greenhouses.length} total',
+                '${greenhouses.length} ${'home_total'.tr}',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -788,7 +788,7 @@ class _EmptyGreenhouses extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No greenhouses yet',
+            'home_empty_title'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -797,7 +797,7 @@ class _EmptyGreenhouses extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Tap + to create your first greenhouse',
+            'home_empty_subtitle'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
@@ -847,7 +847,7 @@ class _GreenhouseCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    greenhouse.name.isNotEmpty ? greenhouse.name : 'Unnamed Greenhouse',
+                    greenhouse.name.isNotEmpty ? greenhouse.name : 'home_unnamed'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
@@ -890,14 +890,18 @@ class _GreenhouseCard extends StatelessWidget {
               _InfoChip(
                 cs: cs,
                 icon: Icons.view_in_ar,
-                label: '$zoneCount zone${zoneCount == 1 ? '' : 's'}',
+                label: zoneCount == 1
+                    ? 'home_zone_count'.trParams({'count': zoneCount.toString()})
+                    : 'home_zone_count_plural'.trParams({'count': zoneCount.toString()}),
               ),
               if (treeCount > 0) ...[
                 const SizedBox(width: 16),
                 _InfoChip(
                   cs: cs,
                   icon: Icons.eco,
-                  label: '$treeCount tree${treeCount == 1 ? '' : 's'}',
+                  label: treeCount == 1
+                      ? 'home_tree_count'.trParams({'count': treeCount.toString()})
+                      : 'home_tree_count_plural'.trParams({'count': treeCount.toString()}),
                 ),
               ],
             ],

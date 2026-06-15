@@ -6,6 +6,8 @@ import '../features/greenhouse_details/presentation/views/greenhouse_details_pag
 import '../features/shell/presentation/bindings/shell_binding.dart';
 import '../features/shell/presentation/views/shell_page.dart';
 import '../features/splash/presentation/views/splash_page.dart';
+import '../features/tree_details/presentation/bindings/tree_details_binding.dart';
+import '../features/tree_details/presentation/views/tree_details_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -32,6 +34,11 @@ class AppPages {
       name: AppRoutes.greenhouseDetails,
       page: () => const GreenhouseDetailsPage(),
       binding: GreenhouseDetailsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.treeDetails,
+      page: () => const TreeDetailsPage(),
+      binding: TreeDetailsBinding(),
     ),
   ];
 }

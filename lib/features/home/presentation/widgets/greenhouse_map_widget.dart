@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// A widget that displays a greenhouse zones map with tree markers, legend,
 /// and interactive zone indicators.
@@ -33,7 +34,7 @@ class _SectionHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Greenhouse Zones',
+          'home_map_title'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 24,
@@ -44,7 +45,7 @@ class _SectionHeader extends StatelessWidget {
         ),
         const SizedBox(height: 0),
         Text(
-          'Real-time spatial mapping and vegetation status.',
+          'home_map_subtitle'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16,
@@ -134,7 +135,7 @@ class _LayoutMapTitle extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          'LAYOUT MAP',
+          'home_layout_map'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 12,
@@ -158,11 +159,11 @@ class _LegendRow extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _LegendDot(color: cs.primary, label: 'Healthy'),
+        _LegendDot(color: cs.primary, label: 'home_status_healthy'.tr),
         const SizedBox(width: 12),
-        const _LegendDot(color: Color(0xFFF97316), label: 'Warning'),
+        _LegendDot(color: const Color(0xFFF97316), label: 'home_status_warning'.tr),
         const SizedBox(width: 12),
-        const _LegendDot(color: Color(0xFFBA1A1A), label: 'Critical'),
+        _LegendDot(color: const Color(0xFFBA1A1A), label: 'home_status_critical'.tr),
       ],
     );
   }

@@ -50,8 +50,23 @@ class AddGreenhouseController extends GetxController {
   final currentStep = 0.obs;
   final totalSteps = 3;
 
-  // ---- Step labels ----
-  static const stepLabels = ['BASIC INFO', 'GREENHOUSE MAP', 'REVIEW & CONFIRM'];
+  // ---- Step labels (translated via .tr) ----
+  static const stepLabelKeys = [
+    'add_gh_step1_label',
+    'add_gh_step2_label',
+    'add_gh_step3_label',
+  ];
+  static const facilityTypeKeys = [
+    'add_gh_facility_glasshouse',
+    'add_gh_facility_polytunnel',
+    'add_gh_facility_vertical_farm',
+    'add_gh_facility_growth_chamber',
+  ];
+  static const solarOrientationKeys = [
+    'add_gh_orientation_ns',
+    'add_gh_orientation_ew',
+    'add_gh_orientation_multi',
+  ];
 
   // ---- Form data (step 1) ----
   final nameController = TextEditingController();
@@ -61,7 +76,9 @@ class AddGreenhouseController extends GetxController {
   final heightController = TextEditingController();
   final descriptionController = TextEditingController();
 
+  /// Facility type data values (English, used for storage).
   static const facilityTypes = ['Glasshouse', 'Polytunnel', 'Vertical Farm', 'Growth Chamber'];
+  /// Solar orientation data values (English, used for storage).
   static const solarOrientations = ['North-South Alignment', 'East-West Alignment', 'Multi-Span'];
 
   // ---- Tree grid inputs (step 1) ----
@@ -92,7 +109,7 @@ class AddGreenhouseController extends GetxController {
   bool get isFirstStep => currentStep.value == 0;
   bool get isLastStep => currentStep.value == totalSteps - 1;
 
-  String get currentStepLabel => stepLabels[currentStep.value];
+  String get currentStepLabel => stepLabelKeys[currentStep.value].tr;
 
   /// Zone positions converted to typed ZoneData list.
   List<ZoneData> get zonesData => zones.map((z) {

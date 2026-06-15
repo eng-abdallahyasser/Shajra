@@ -129,7 +129,7 @@ class _HeaderSection extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Reports',
+                  'reports_title'.tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 28,
@@ -151,7 +151,7 @@ class _HeaderSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Farm analytics & performance overview',
+            'reports_subtitle'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
@@ -184,7 +184,7 @@ class _SummaryCards extends StatelessWidget {
             children: [
               Expanded(
                 child: _SummaryTile(
-                  label: 'Greenhouses',
+                  label: 'reports_summary_greenhouses'.tr,
                   value: '${report.totalGreenhouses}',
                   icon: Icons.home_work_outlined,
                   color: cs.primary,
@@ -194,7 +194,7 @@ class _SummaryCards extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _SummaryTile(
-                  label: 'Zones',
+                  label: 'reports_summary_zones'.tr,
                   value: '${report.totalZones}',
                   icon: Icons.grid_view_outlined,
                   color: cs.tertiary,
@@ -208,7 +208,7 @@ class _SummaryCards extends StatelessWidget {
             children: [
               Expanded(
                 child: _SummaryTile(
-                  label: 'Tasks',
+                  label: 'reports_summary_tasks'.tr,
                   value: '${report.totalTasks}',
                   icon: Icons.checklist_outlined,
                   color: cs.secondary,
@@ -218,7 +218,7 @@ class _SummaryCards extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _SummaryTile(
-                  label: 'Completed',
+                  label: 'reports_summary_completed'.tr,
                   value: '${(report.completionRate * 100).round()}%',
                   icon: Icons.trending_up_rounded,
                   color: report.completionRate > 0.6
@@ -325,21 +325,21 @@ class _PeriodFilter extends StatelessWidget {
         () => Row(
           children: [
             _PeriodChip(
-              label: '7 days',
+              label: 'reports_period_7d'.tr,
               isActive: controller.reportPeriod.value == ReportPeriod.week,
               cs: cs,
               onTap: () => controller.setPeriod(ReportPeriod.week),
             ),
             const SizedBox(width: 8),
             _PeriodChip(
-              label: '30 days',
+              label: 'reports_period_30d'.tr,
               isActive: controller.reportPeriod.value == ReportPeriod.month,
               cs: cs,
               onTap: () => controller.setPeriod(ReportPeriod.month),
             ),
             const SizedBox(width: 8),
             _PeriodChip(
-              label: '90 days',
+              label: 'reports_period_90d'.tr,
               isActive: controller.reportPeriod.value == ReportPeriod.quarter,
               cs: cs,
               onTap: () => controller.setPeriod(ReportPeriod.quarter),
@@ -429,7 +429,7 @@ class _EnvironmentalOverview extends StatelessWidget {
               Icon(Icons.analytics_outlined, size: 18, color: cs.onSurface),
               const SizedBox(width: 8),
               Text(
-                'Environmental Overview',
+                'reports_env_overview'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -445,7 +445,7 @@ class _EnvironmentalOverview extends StatelessWidget {
             children: [
               Expanded(
                 child: _EnvMetricCard(
-                  label: 'Avg Temperature',
+                  label: 'reports_avg_temp'.tr,
                   value: '${avgTemp.toStringAsFixed(1)}°C',
                   icon: Icons.thermostat,
                   color: avgTemp > 28 ? cs.error : cs.primary,
@@ -455,7 +455,7 @@ class _EnvironmentalOverview extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _EnvMetricCard(
-                  label: 'Avg Humidity',
+                  label: 'reports_avg_humidity'.tr,
                   value: '${avgHum.toStringAsFixed(0)}%',
                   icon: Icons.water_drop,
                   color: avgHum > 75 ? cs.error : cs.primary,
@@ -504,7 +504,7 @@ class _EnvironmentalOverview extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Total Cultivation Area',
+                        'reports_total_area'.tr,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
@@ -522,7 +522,7 @@ class _EnvironmentalOverview extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    '${report.totalTrees} trees',
+                    '${report.totalTrees} ${'reports_trees'.tr}',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
@@ -629,7 +629,7 @@ class _TaskProgress extends StatelessWidget {
               Icon(Icons.check_circle_outline, size: 18, color: cs.onSurface),
               const SizedBox(width: 8),
               Text(
-                'Task Completion',
+                'reports_task_completion'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -657,25 +657,25 @@ class _TaskProgress extends StatelessWidget {
                   children: [
                     _TaskStat(
                       value: '${report.totalTasks}',
-                      label: 'Total',
+                      label: 'reports_stat_total'.tr,
                       color: cs.onSurface,
                       cs: cs,
                     ),
                     _TaskStat(
                       value: '${report.completedTasks}',
-                      label: 'Done',
+                      label: 'reports_stat_done'.tr,
                       color: cs.primary,
                       cs: cs,
                     ),
                     _TaskStat(
                       value: '${report.pendingTasks}',
-                      label: 'Pending',
+                      label: 'reports_stat_pending'.tr,
                       color: cs.error,
                       cs: cs,
                     ),
                     _TaskStat(
                       value: '${(completionPct * 100).round()}%',
-                      label: 'Rate',
+                      label: 'reports_stat_rate'.tr,
                       color: cs.secondary,
                       cs: cs,
                     ),
@@ -717,11 +717,11 @@ class _TaskProgress extends StatelessWidget {
                 // Legend row
                 Row(
                   children: [
-                    _LegendDot(color: cs.primary, label: 'Completed', cs: cs),
+                    _LegendDot(color: cs.primary, label: 'reports_legend_completed'.tr, cs: cs),
                     const SizedBox(width: 16),
                     _LegendDot(
                       color: cs.surfaceContainerLow,
-                      label: 'Pending',
+                      label: 'reports_legend_pending'.tr,
                       cs: cs,
                     ),
                   ],
@@ -830,7 +830,7 @@ class _GreenhouseBreakdownHeader extends StatelessWidget {
           Icon(Icons.home_work_outlined, size: 18, color: cs.onSurface),
           const SizedBox(width: 8),
           Text(
-            'Greenhouse Breakdown',
+            'reports_breakdown'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -913,14 +913,14 @@ class _GreenhouseReportCard extends StatelessWidget {
                 _GhMetric(
                   icon: Icons.grid_view_outlined,
                   value: '${report.zoneCount}',
-                  label: 'Zones',
+                  label: 'reports_metric_zones'.tr,
                   cs: cs,
                 ),
                 const SizedBox(width: 16),
                 _GhMetric(
                   icon: Icons.eco_outlined,
                   value: '${report.treeCount}',
-                  label: 'Trees',
+                  label: 'reports_metric_trees'.tr,
                   cs: cs,
                 ),
                 const SizedBox(width: 16),
@@ -1112,7 +1112,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'No data yet',
+              'reports_empty_title'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
@@ -1121,7 +1121,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Add greenhouses and tasks\nto see your farm reports',
+              'reports_empty_subtitle'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
