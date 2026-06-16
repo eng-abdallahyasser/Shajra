@@ -214,6 +214,53 @@ class Messages extends Translations {
           'reports_metric_trees': 'Trees',
           'reports_empty_title': 'No data yet',
           'reports_empty_subtitle': 'Add greenhouses and tasks\nto see your farm reports',
+
+          // ── Greenhouse Details ──
+          'details_appbar_title': 'Greenhouse Details',
+          'details_active_zones': 'Active Zones',
+          'details_no_zones': 'No zones defined',
+          'details_trees_section': 'Trees',
+          'details_no_trees': 'No trees in this greenhouse',
+          'details_map_layout_title': 'Greenhouse Layout',
+          'details_tree_profile': 'Tree Profile',
+          'details_zone_profile': 'Zone Profile',
+          'details_zone_metric_trees': 'Trees',
+          'details_zone_metric_tag': 'Tag',
+
+          // ── Tree Details ──
+          'tree_details_micro_tagging': 'Micro-Tagging ID',
+          'tree_details_coordinates': 'Coordinates',
+          'tree_details_latest_scan': 'Latest Scan Result',
+          'tree_details_disease_detected': 'Disease Detected',
+          'tree_details_diseased': 'Diseased',
+          'tree_details_view_image': 'View Image',
+          'tree_details_model_ready': 'AI Model Ready',
+          'tree_details_model_error': 'Model Error',
+          'tree_details_loading': 'Loading...',
+          'tree_details_scan_history': 'Scan History',
+          'tree_details_scan_count': '{{count}} scan',
+          'tree_details_scan_count_plural': '{{count}} scans',
+          'tree_details_no_scans': 'No scans yet',
+          'tree_details_no_scans_desc': 'Tap "Scan Leaf" to perform a disease detection',
+          'tree_details_scanning': 'Scanning...',
+          'tree_details_scan_leaf': 'Scan Leaf',
+          'tree_details_clear_logs': 'Clear all logs',
+          'tree_details_just_now': 'Just now',
+          'tree_details_min_ago': '{{count}}m ago',
+          'tree_details_hour_ago': '{{count}}h ago',
+          'tree_details_day_ago': '{{count}}d ago',
+          'tree_details_view_image_tooltip': 'View image',
+          'tree_details_delete_scan': 'Delete scan',
+
+          // ── Tasks zones ──
+          'tasks_zone_all': 'All',
+          'tasks_zone_a': 'Zone A',
+          'tasks_zone_b': 'Zone B',
+          'tasks_zone_c': 'Zone C',
+
+          // ── Home Map ──
+          'home_map_zone_a': 'ZONE A',
+          'home_map_zone_b': 'ZONE B',
         },
         'ar': {
           'app_title': 'شجرة',
@@ -424,6 +471,53 @@ class Messages extends Translations {
           'reports_metric_trees': 'أشجار',
           'reports_empty_title': 'لا توجد بيانات بعد',
           'reports_empty_subtitle': 'أضف دفيئات ومهام\nلرؤية تقارير مزرعتك',
+
+          // ── تفاصيل الدفيئة ──
+          'details_appbar_title': 'تفاصيل الدفيئة',
+          'details_active_zones': 'المناطق النشطة',
+          'details_no_zones': 'لم يتم تحديد أي مناطق',
+          'details_trees_section': 'الأشجار',
+          'details_no_trees': 'لا توجد أشجار في هذه الدفيئة',
+          'details_map_layout_title': 'مخطط الدفيئة',
+          'details_tree_profile': 'ملف الشجرة',
+          'details_zone_profile': 'ملف المنطقة',
+          'details_zone_metric_trees': 'الأشجار',
+          'details_zone_metric_tag': 'الرمز',
+
+          // ── تفاصيل الشجرة ──
+          'tree_details_micro_tagging': 'معرف التوسيم الدقيق',
+          'tree_details_coordinates': 'الإحداثيات',
+          'tree_details_latest_scan': 'نتيجة آخر فحص',
+          'tree_details_disease_detected': 'تم اكتشاف مرض',
+          'tree_details_diseased': 'مريض',
+          'tree_details_view_image': 'عرض الصورة',
+          'tree_details_model_ready': 'نموذج الذكاء الاصطناعي جاهز',
+          'tree_details_model_error': 'خطأ في النموذج',
+          'tree_details_loading': 'جاري التحميل...',
+          'tree_details_scan_history': 'سجل الفحص',
+          'tree_details_scan_count': '{{count}} فحص',
+          'tree_details_scan_count_plural': '{{count}} فحوصات',
+          'tree_details_no_scans': 'لا توجد فحوصات بعد',
+          'tree_details_no_scans_desc': 'اضغط على "فحص الورقة" لإجراء الكشف عن الأمراض',
+          'tree_details_scanning': 'جاري المسح...',
+          'tree_details_scan_leaf': 'فحص الورقة',
+          'tree_details_clear_logs': 'مسح جميع السجلات',
+          'tree_details_just_now': 'الآن',
+          'tree_details_min_ago': 'منذ {{count}} دقيقة',
+          'tree_details_hour_ago': 'منذ {{count}} ساعة',
+          'tree_details_day_ago': 'منذ {{count}} يوم',
+          'tree_details_view_image_tooltip': 'عرض الصورة',
+          'tree_details_delete_scan': 'حذف الفحص',
+
+          // ── مناطق المهام ──
+          'tasks_zone_all': 'الكل',
+          'tasks_zone_a': 'المنطقة أ',
+          'tasks_zone_b': 'المنطقة ب',
+          'tasks_zone_c': 'المنطقة ج',
+
+          // ── خريطة الرئيسية ──
+          'home_map_zone_a': 'المنطقة أ',
+          'home_map_zone_b': 'المنطقة ب',
         },
       };
 }

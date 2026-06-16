@@ -19,7 +19,7 @@ class GreenhouseDetailsPage extends StatelessWidget {
       backgroundColor: cs.surfaceContainerLow,
       appBar: AppBar(
         title: Text(
-          greenhouse.name.isNotEmpty ? greenhouse.name : 'Greenhouse Details',
+          greenhouse.name.isNotEmpty ? greenhouse.name : 'details_appbar_title'.tr,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: cs.surface,
@@ -83,9 +83,8 @@ class _OverallStatusCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        children: [
-          Text(
-            'OVERALL STATUS',
+        children: [            Text(
+            'home_overall_status'.tr,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
@@ -133,7 +132,7 @@ class _OverallStatusCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(9999),
             ),
             child: Text(
-              'Normal',
+              'home_status_normal'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -169,9 +168,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/humidity.svg',
-                    label: 'HUMIDITY',
+                    label: 'home_humidity'.tr,
                     value: '65%',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.primary,
@@ -183,9 +182,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/light lever.svg',
-                    label: 'LIGHT LEVEL',
+                    label: 'home_light_level'.tr,
                     value: '8k lux',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -203,9 +202,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/soil moisture.svg',
-                    label: 'SOIL MOISTURE',
+                    label: 'home_soil_moisture'.tr,
                     value: '42%',
-                    badgeLabel: 'Low',
+                    badgeLabel: 'home_badge_low'.tr,
                     badgeColor: cs.error,
                     badgeBg: cs.error.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -217,9 +216,9 @@ class _EnvironmentalGrid extends StatelessWidget {
                   child: _EnvTile(
                     cs: cs,
                     svgPath: 'assets/icons/co2.svg',
-                    label: 'CO2 LEVEL',
+                    label: 'home_co2_level'.tr,
                     value: '400 ppm',
-                    badgeLabel: 'Good',
+                    badgeLabel: 'home_badge_good'.tr,
                     badgeColor: cs.primary,
                     badgeBg: cs.primary.withValues(alpha: 0.15),
                     statusColor: cs.onSurface,
@@ -360,7 +359,7 @@ class _ActiveZonesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Active Zones',
+              'details_active_zones'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -370,7 +369,7 @@ class _ActiveZonesSection extends StatelessWidget {
             ),
             if (zones.isNotEmpty)
               Text(
-                '${zones.length} total',
+                '${zones.length} ${'home_total'.tr}',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -392,7 +391,7 @@ class _ActiveZonesSection extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'No zones defined',
+                'details_no_zones'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
@@ -412,7 +411,7 @@ class _ActiveZonesSection extends StatelessWidget {
                 final idx = zones.indexOf(z);
                 final isHealthy = idx % 3 != 1;
                 final statusColor = isHealthy ? cs.primary : cs.error;
-                final statusLabel = isHealthy ? 'Healthy' : 'Warning';
+                final statusLabel = isHealthy ? 'home_status_healthy'.tr : 'home_status_warning'.tr;
 
                 return Padding(
                   padding: EdgeInsets.only(right: zones.last == z ? 0 : 16),
@@ -508,9 +507,9 @@ class _ZoneCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                _ZoneMetricLabel(label: 'Trees', value: '$treeCount'),
+                _ZoneMetricLabel(label: 'details_zone_metric_trees'.tr, value: '$treeCount'),
                 const SizedBox(width: 24),
-                _ZoneMetricLabel(label: 'Tag', value: zoneId),
+                _ZoneMetricLabel(label: 'details_zone_metric_tag'.tr, value: zoneId),
               ],
             ),
           ],
@@ -583,7 +582,7 @@ class _TreeDataSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Trees',
+              'details_trees_section'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -593,7 +592,7 @@ class _TreeDataSection extends StatelessWidget {
             ),
             if (trees.isNotEmpty)
               Text(
-                '${trees.length} total',
+                '${trees.length} ${'home_total'.tr}',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -623,7 +622,7 @@ class _TreeDataSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'No trees in this greenhouse',
+                  'details_no_trees'.tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -639,7 +638,7 @@ class _TreeDataSection extends StatelessWidget {
             final tree = entry.value;
 
             // Find zone name
-            String zoneName = 'Not assigned';
+            String zoneName = 'add_gh_not_assigned'.tr;
             if (tree.zoneId != null) {
               final zone = zones.firstWhereOrNull((z) => z.id == tree.zoneId);
               if (zone != null) zoneName = zone.name;
@@ -647,7 +646,7 @@ class _TreeDataSection extends StatelessWidget {
 
             final isHealthy = i % 3 != 1;
             final statusColor = isHealthy ? cs.primary : cs.error;
-            final statusLabel = isHealthy ? 'Healthy' : 'Warning';
+            final statusLabel = isHealthy ? 'home_status_healthy'.tr : 'home_status_warning'.tr;
 
             return GestureDetector(
               onTap: () => Get.toNamed(AppRoutes.treeDetails, arguments: {

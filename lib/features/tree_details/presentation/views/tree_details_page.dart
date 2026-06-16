@@ -26,7 +26,7 @@ class TreeDetailsPage extends StatelessWidget {
             () => controller.logs.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.delete_sweep_outlined),
-                    tooltip: 'Clear all logs',
+                    tooltip: 'tree_details_clear_logs'.tr,
                     onPressed: controller.clearAllLogs,
                   )
                 : const SizedBox.shrink(),
@@ -94,7 +94,7 @@ class TreeDetailsPage extends StatelessWidget {
                 )
               : const Icon(Icons.camera_alt),
           label: Text(
-            controller.isScanning.value ? 'Scanning...' : 'Scan Leaf',
+            controller.isScanning.value ? 'tree_details_scanning'.tr : 'tree_details_scan_leaf'.tr,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 12,
@@ -171,7 +171,7 @@ class _TreeInfoCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Micro-Tagging ID',
+                      'tree_details_micro_tagging'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 13,
@@ -192,7 +192,7 @@ class _TreeInfoCard extends StatelessWidget {
                 child: _InfoTile(
                   cs: cs,
                   icon: Icons.qr_code,
-                  label: 'Greenhouse',
+                  label: 'add_gh_greenhouse'.tr,
                   value: ghNumber.isNotEmpty ? 'GH #$ghNumber' : '—',
                 ),
               ),
@@ -201,7 +201,7 @@ class _TreeInfoCard extends StatelessWidget {
                 child: _InfoTile(
                   cs: cs,
                   icon: Icons.view_in_ar,
-                  label: 'Zone',
+                  label: 'add_gh_zone'.tr,
                   value: zoneName,
                 ),
               ),
@@ -214,7 +214,7 @@ class _TreeInfoCard extends StatelessWidget {
                 child: _InfoTile(
                   cs: cs,
                   icon: Icons.my_location,
-                  label: 'Position',
+                  label: 'add_gh_position'.tr,
                   value: '(${tree.x}, ${tree.y}) m',
                 ),
               ),
@@ -223,7 +223,7 @@ class _TreeInfoCard extends StatelessWidget {
                 child: _InfoTile(
                   cs: cs,
                   icon: Icons.straighten,
-                  label: 'Coordinates',
+                  label: 'tree_details_coordinates'.tr,
                   value: '(${tree.x}, ${tree.y}) m',
                 ),
               ),
@@ -308,7 +308,7 @@ class _LatestScanCard extends StatelessWidget {
     final isHealthy = !log.isDiseased;
     final statusColor = isHealthy ? cs.primary : cs.error;
     final statusIcon = isHealthy ? Icons.check_circle : Icons.warning_amber_rounded;
-    final statusLabel = isHealthy ? 'Healthy' : 'Disease Detected';
+    final statusLabel = isHealthy ? 'home_status_healthy'.tr : 'tree_details_disease_detected'.tr;
 
     return Container(
       width: double.infinity,
@@ -330,7 +330,7 @@ class _LatestScanCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Latest Scan Result',
+                    'tree_details_latest_scan'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 12,
@@ -393,11 +393,11 @@ class _LatestScanCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Healthy',
+                'home_status_healthy'.tr,
                 style: TextStyle(fontSize: 10, color: cs.onSurfaceVariant),
               ),
               Text(
-                'Diseased',
+                'tree_details_diseased'.tr,
                 style: TextStyle(fontSize: 10, color: cs.onSurfaceVariant),
               ),
             ],
@@ -421,7 +421,7 @@ class _LatestScanCard extends StatelessWidget {
               TextButton.icon(
                 onPressed: onViewImage,
                 icon: const Icon(Icons.image_outlined, size: 16),
-                label: const Text('View Image', style: TextStyle(fontSize: 12)),
+                label: Text('tree_details_view_image'.tr, style: const TextStyle(fontSize: 12)),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   minimumSize: Size.zero,
@@ -438,10 +438,10 @@ class _LatestScanCard extends StatelessWidget {
   String _formatDate(DateTime dt) {
     final now = DateTime.now();
     final diff = now.difference(dt);
-    if (diff.inMinutes < 1) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    if (diff.inMinutes < 1) return 'tree_details_just_now'.tr;
+    if (diff.inMinutes < 60) return 'tree_details_min_ago'.trParams({'count': diff.inMinutes.toString()});
+    if (diff.inHours < 24) return 'tree_details_hour_ago'.trParams({'count': diff.inHours.toString()});
+    if (diff.inDays < 7) return 'tree_details_day_ago'.trParams({'count': diff.inDays.toString()});
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 }
@@ -465,7 +465,7 @@ class _ModelStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = isLoaded ? Icons.check_circle_outline : (error != null ? Icons.error_outline : Icons.hourglass_empty);
     final color = isLoaded ? cs.primary : (error != null ? cs.error : cs.outline);
-    final label = isLoaded ? 'AI Model Ready' : (error != null ? 'Model Error' : 'Loading...');
+    final label = isLoaded ? 'tree_details_model_ready'.tr : (error != null ? 'tree_details_model_error'.tr : 'tree_details_loading'.tr);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -536,7 +536,7 @@ class _ScanHistorySection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Scan History',
+              'tree_details_scan_history'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -546,7 +546,9 @@ class _ScanHistorySection extends StatelessWidget {
             ),
             if (logs.isNotEmpty)
               Text(
-                '${logs.length} scan${logs.length == 1 ? '' : 's'}',
+                logs.length == 1
+                    ? 'tree_details_scan_count'.trParams({'count': logs.length.toString()})
+                    : 'tree_details_scan_count_plural'.trParams({'count': logs.length.toString()}),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -573,7 +575,7 @@ class _ScanHistorySection extends StatelessWidget {
                 Icon(Icons.search, size: 48, color: cs.primary.withValues(alpha: 0.5)),
                 const SizedBox(height: 12),
                 Text(
-                  'No scans yet',
+                  'tree_details_no_scans'.tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -582,7 +584,7 @@ class _ScanHistorySection extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Tap "Scan Leaf" to perform a disease detection',
+                  'tree_details_no_scans_desc'.tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -715,7 +717,7 @@ class _ScanLogCard extends StatelessWidget {
           IconButton(
             onPressed: onViewImage,
             icon: Icon(Icons.image_outlined, size: 18, color: cs.primary),
-            tooltip: 'View image',
+            tooltip: 'tree_details_view_image_tooltip'.tr,
             style: IconButton.styleFrom(
               padding: const EdgeInsets.all(8),
               minimumSize: Size.zero,
@@ -725,7 +727,7 @@ class _ScanLogCard extends StatelessWidget {
           IconButton(
             onPressed: onDelete,
             icon: Icon(Icons.delete_outline, size: 18, color: cs.error.withValues(alpha: 0.7)),
-            tooltip: 'Delete scan',
+            tooltip: 'tree_details_delete_scan'.tr,
             style: IconButton.styleFrom(
               padding: const EdgeInsets.all(8),
               minimumSize: Size.zero,
@@ -740,10 +742,10 @@ class _ScanLogCard extends StatelessWidget {
   String _formatDate(DateTime dt) {
     final now = DateTime.now();
     final diff = now.difference(dt);
-    if (diff.inMinutes < 1) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    if (diff.inMinutes < 1) return 'tree_details_just_now'.tr;
+    if (diff.inMinutes < 60) return 'tree_details_min_ago'.trParams({'count': diff.inMinutes.toString()});
+    if (diff.inHours < 24) return 'tree_details_hour_ago'.trParams({'count': diff.inHours.toString()});
+    if (diff.inDays < 7) return 'tree_details_day_ago'.trParams({'count': diff.inDays.toString()});
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 }

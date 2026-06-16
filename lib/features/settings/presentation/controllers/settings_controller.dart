@@ -6,13 +6,13 @@ class SettingsController extends GetxController {
   final _box = GetStorage();
 
   final isDarkMode = false.obs;
-  final isArabic = false.obs;
+  final isArabic = true.obs;
 
   @override
   void onInit() {
     super.onInit();
     isDarkMode.value = _box.read('isDarkMode') ?? false;
-    isArabic.value = _box.read('isArabic') ?? false;
+    isArabic.value = _box.read('isArabic') ?? true;
   }
 
   void toggleDarkMode() {

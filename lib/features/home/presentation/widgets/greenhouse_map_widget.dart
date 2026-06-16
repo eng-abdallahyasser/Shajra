@@ -254,7 +254,7 @@ class _MapCanvas extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'ZONE A',
+                      'home_map_zone_a'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 10,
@@ -273,7 +273,7 @@ class _MapCanvas extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'ZONE B',
+                      'home_map_zone_b'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 10,
@@ -389,7 +389,7 @@ class _GreenhouseStructure extends StatelessWidget {
           ),
         ),
         child: Text(
-          'GREENHOUSE',
+          'home_greenhouse_label'.tr,
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 8,

@@ -23,7 +23,7 @@ class ShajraApp extends StatelessWidget {
       locale:
           settings.isArabic.value ? const Locale('ar') : const Locale('en'),
       translations: Messages(),
-      fallbackLocale: const Locale('en'),
+      fallbackLocale: const Locale('ar'),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

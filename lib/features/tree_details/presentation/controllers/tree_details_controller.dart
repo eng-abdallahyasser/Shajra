@@ -60,20 +60,25 @@ class TreeDetailsController extends GetxController {
 
       isScanning.value = true;
 
+      debugPrint('[TreeDetailsController] Starting scan for tree: ${tree.id}');
       final file = File(photo.path);
-      final confidence = await _diseaseService.predict(file);
+      final result = await _diseaseService.predict(file);
+
+      debugPrint('[TreeDetailsController] Scan complete: $result');
 
       final log = ScanLogEntity(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         treeId: tree.id,
         scannedAt: DateTime.now(),
         imagePath: photo.path,
-        confidence: confidence,
+        confidence: result.confidence,
+        predictedClass: result.predictedClass,
       );
       await _logRepo.insert(log);
 
       _loadLogs();
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('[TreeDetailsController] Scan FAILED: $e\n$stack');
       Get.snackbar(
         'Scan Failed',
         'Could not complete the scan: $e',

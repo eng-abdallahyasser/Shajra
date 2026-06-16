@@ -14,6 +14,17 @@ const _priorityKeys = {
 /// Return the translated label for a task priority.
 String _priorityLabel(TaskPriority p) => _priorityKeys[p]!.tr;
 
+/// Zone data value to translated label lookup.
+const _zoneKeys = {
+  'All': 'tasks_zone_all',
+  'Zone A': 'tasks_zone_a',
+  'Zone B': 'tasks_zone_b',
+  'Zone C': 'tasks_zone_c',
+};
+
+/// Return the translated label for a zone value.
+String _zoneLabel(String zone) => _zoneKeys[zone]?.tr ?? zone;
+
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
@@ -171,8 +182,8 @@ class TasksPage extends StatelessWidget {
                     child: _SheetDropdown(
                       label: 'tasks_zone_label'.tr,
                       value: selectedZone.value,
-                      items: const ['All', 'Zone A', 'Zone B', 'Zone C'],
-                      onChanged: (v) => selectedZone.value = v!,
+                      items: _zoneKeys.keys.toList(),
+                      onChanged: (v) => selectedZone.value = v ?? 'All',
                       cs: cs,
                     ),
                   ),
@@ -685,7 +696,7 @@ class _TaskCard extends StatelessWidget {
                           // Zone badge
                           if (task.zone != 'All')
                             _TagChip(
-                              label: task.zone,
+                              label: _zoneLabel(task.zone),
                               color: cs.tertiary,
                               bgColor: cs.tertiaryContainer,
                               cs: cs,
@@ -915,7 +926,11 @@ class _SheetDropdown extends StatelessWidget {
               value: value,
               isExpanded: true,
               items: items.map((item) {
-                return DropdownMenuItem(value: item, child: Text(item));
+                final label = _zoneKeys[item];
+                return DropdownMenuItem(
+                  value: item,
+                  child: Text(label != null ? label.tr : item),
+                );
               }).toList(),
               onChanged: onChanged,
               style: TextStyle(
